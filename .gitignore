@@ -1,0 +1,22 @@
+# Virtual Environments
+venv/
+ENV/
+.venv/
+
+# Python/Django
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.sqlite3
+*.log
+*.pot
+*.py~
+*.swp
+*.swo
+db.sqlite3               
+media/         
+
+# Temporary files
+tmp/
+temp/
