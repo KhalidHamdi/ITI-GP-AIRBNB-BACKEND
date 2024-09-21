@@ -12,3 +12,4 @@ class PropertiesListSerializer(serializers.ModelSerializer):
             'image_url',
         )
 
+
