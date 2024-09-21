@@ -35,6 +35,19 @@ ALLOWED_HOSTS = ['*']
 WEBSITE_URL='http://localhost:8000'
 
 
+
+DJANGO_REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated',
+    ],
+}
+
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -44,11 +57,23 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
     'corsheaders',
+    
+    # Other apps for authintication :)
+    'rest_framework',
+    'rest_framework.authtoken',
+    'allauth',
+    'allauth.account',  # for allauth account functionality
+    'allauth.socialaccount',  # Optional, for social logins
+    
+    'dj_rest_auth',
+    'dj_rest_auth.registration',
 
-    'property'
+    # project main apps
+    'property',
     'useraccount',
+    
+
 ]
 
 MIDDLEWARE = [
@@ -60,6 +85,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware', 
+
 ]
 
 # REST_FRAMEWORK = {
