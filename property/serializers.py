@@ -13,3 +13,19 @@ class PropertiesListSerializer(serializers.ModelSerializer):
         )
 
 
+class PropertiesDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Property
+        fields = (
+            'id',
+            'title',
+            'description',
+            'price_per_night',
+            'image_url',
+            'bedrooms',
+            'bathrooms',
+            'guests',
+            'country',
+            'category'
+        )
+
