@@ -2,6 +2,7 @@
 venv/
 ENV/
 .venv/
+myenv
 
 # Python/Django
 *.pyc
@@ -20,3 +21,4 @@ media/
 # Temporary files
 tmp/
 temp/
+.vscode
