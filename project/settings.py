@@ -100,6 +100,7 @@ INSTALLED_APPS = [
     # project main apps
     'property',
     'useraccount',
+    'chat',
     
 
 ]
