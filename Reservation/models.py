@@ -7,7 +7,6 @@ from property.models import Property
 from useraccount.models import User
 
 class Reservation(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     property = models.ForeignKey(Property, related_name='reservations', on_delete=models.CASCADE)
     start_date = models.DateField()
     end_date = models.DateField()
@@ -18,8 +17,9 @@ class Reservation(models.Model):
     created_by = models.ForeignKey('useraccount.User', on_delete=models.CASCADE, related_name='reservations')
 
     created_at = models.DateTimeField(auto_now_add=True)
+
+    id=models.CharField(primary_key=True,default=uuid.uuid4, editable=False, max_length=36)
     
      
     def __str__(self):
-        return self.property
-    
+        return f"Reservation for {self.property.title}"
