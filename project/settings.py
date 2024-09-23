@@ -106,7 +106,7 @@ INSTALLED_APPS = [
     # project main apps
     'property',
     'useraccount',
-    'Reservation'
+    'Reservation' , 
     
     'chat',
 
