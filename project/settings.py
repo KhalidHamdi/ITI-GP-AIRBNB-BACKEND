@@ -14,6 +14,11 @@ import os
 from decouple import config
 from pathlib import Path
 from datetime import timedelta
+import cloudinary_storage
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -97,11 +102,14 @@ INSTALLED_APPS = [
     'dj_rest_auth',
     'dj_rest_auth.registration',
 
+
     # project main apps
     'property',
     'useraccount',
-    
+    'chat',
 
+    'cloudinary',
+    'cloudinary_storage',
 ]
 
 MIDDLEWARE = [
@@ -224,11 +232,26 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+cloudinary.config( 
+    cloud_name = "dt0nlcc8n", 
+    api_key = "571797429827582", 
+    api_secret = "wG8DNq45p9FvvJbMPokTgTExpiY",
+    secure = True
+)
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': 'dt0nlcc8n',
+    'API_KEY': '571797429827582',
+    'API_SECRET': 'wG8DNq45p9FvvJbMPokTgTExpiY',
+}
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

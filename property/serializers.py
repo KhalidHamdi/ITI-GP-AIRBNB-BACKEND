@@ -2,6 +2,7 @@ from .models import Property
 from rest_framework import serializers 
 
 class PropertiesListSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
 
     class Meta:
         model = Property
@@ -12,8 +13,13 @@ class PropertiesListSerializer(serializers.ModelSerializer):
             'image_url',
         )
 
+    def get_image_url(self, obj):
+        return obj.image.url
+
 
 class PropertiesDetailSerializer(serializers.ModelSerializer):
+    image_url = serializers.SerializerMethodField()
+
     class Meta:
         model = Property
         fields = (
@@ -28,4 +34,7 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
             'country',
             'category'
         )
+
+    def get_image_url(self, obj):
+        return obj.image.url
 
