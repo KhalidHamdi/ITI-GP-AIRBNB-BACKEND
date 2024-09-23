@@ -1,15 +1,16 @@
 from django.http import JsonResponse
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,permission_classes
 from .models import Conversation, ConversationMessage
 from .serializers import ConversationListSerializer, ConversationDetailSerializer, ConversationMessageSerializer
 
 from useraccount.models import User
-
+from rest_framework.permissions import AllowAny
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def conversations_list(request):
-    serializer = ConversationListSerializer(request.user.conversations.all(), many=True)
-
+    conversations = Conversation.objects.all()
+    serializer = ConversationListSerializer(conversations, many=True) 
     return JsonResponse(serializer.data, safe=False)
 
 
