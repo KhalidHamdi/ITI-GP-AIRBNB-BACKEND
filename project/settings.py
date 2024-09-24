@@ -40,7 +40,11 @@ ALLOWED_HOSTS = ['*']
 
 WEBSITE_URL='http://localhost:8000'
 
-
+CHANNEL_LAYERS={
+    'default':{
+        'BACKEND':'channels_layers.InMemoryChannelLayer',
+    }
+}
 
 DJANGO_REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -84,6 +88,7 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
+    'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -96,9 +101,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken',
     'allauth',
-    'allauth.account',  # for allauth account functionality
-    'allauth.socialaccount',  # Optional, for social logins
-    
+    'allauth.account', 
+    'allauth.socialaccount',  
     'dj_rest_auth',
     'dj_rest_auth.registration',
 
@@ -182,6 +186,7 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'project.wsgi.application'
+ASGI_APPLICATION = 'project.asgi.application'
 
 
 # Database
