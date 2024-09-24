@@ -110,6 +110,8 @@ INSTALLED_APPS = [
     # project main apps
     'property',
     'useraccount',
+    'Reservation' , 
+    
     'chat',
 
     'cloudinary',
