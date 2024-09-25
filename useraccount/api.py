@@ -6,6 +6,7 @@ from .models import User
 from .serializers import UserDetailSerializer
 
 from property.serializers import PropertiesListSerializer
+from Reservation.serializers import ReservationsListSerializer
 
 
 @api_view(['GET'])

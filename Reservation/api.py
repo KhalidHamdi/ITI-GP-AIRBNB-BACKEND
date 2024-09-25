@@ -27,8 +27,6 @@ def property_reservations(request, pk):
 
 
 @api_view(['POST'])
-@authentication_classes([])
-@permission_classes([])
 def book_property(request, pk):
     try:
         start_date = request.POST.get('start_date', '')
@@ -51,5 +49,5 @@ def book_property(request, pk):
 
         return JsonResponse({'success': True})
     except Exception as e:
-        print('Error', e)
+        print('Error from server: ', e)
         return JsonResponse({'success': False})
