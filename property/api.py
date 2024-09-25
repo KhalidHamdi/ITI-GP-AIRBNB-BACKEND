@@ -1,7 +1,7 @@
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, permission_classes
-# from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import AllowAny
 from .forms import PropertyForm
 from .models import Property
 from .serializers import PropertiesListSerializer , PropertiesDetailSerializer
@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404
 
 
 @api_view(['GET'])
-# @permission_classes([IsAuthenticated])
+@permission_classes([AllowAny])
 @permission_classes([])
 
 def properties_list(request):
@@ -20,7 +20,8 @@ def properties_list(request):
             'data': serializer.data
         })
 
-@api_view(['POST', 'FILES'])
+@api_view(['POST'])
+@permission_classes([AllowAny])  
 def create_property(request):
     form = PropertyForm(request.POST, request.FILES)
 
@@ -34,7 +35,9 @@ def create_property(request):
         return JsonResponse({'errors': form.errors.as_json()}, status=400)
 
 
+
 @api_view(['GET'])
+@permission_classes([AllowAny])
 @permission_classes([])
 def properties_detail(request, pk):
     property = get_object_or_404(Property, pk=pk)

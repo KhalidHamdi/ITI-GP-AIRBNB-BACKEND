@@ -46,7 +46,6 @@ def book_property(request, pk):
             guests=guests,
             created_by=request.user
         )
-
         return JsonResponse({'success': True})
     except Exception as e:
         print('Error from server: ', e)
