@@ -1,5 +1,6 @@
 from django.http import JsonResponse
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from .models import *
@@ -8,6 +9,7 @@ from .serializers import *
 
 @api_view(['GET'])
 @authentication_classes([])
+@permission_classes([AllowAny])
 @permission_classes([])
 def property_reservations(request, pk):
     try:
@@ -27,6 +29,7 @@ def property_reservations(request, pk):
 
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def book_property(request, pk):
     try:
         start_date = request.POST.get('start_date', '')
@@ -45,6 +48,7 @@ def book_property(request, pk):
             total_price=total_price,
             guests=guests,
             created_by=request.user
+            # created_by=None,           
         )
         return JsonResponse({'success': True})
     except Exception as e:
