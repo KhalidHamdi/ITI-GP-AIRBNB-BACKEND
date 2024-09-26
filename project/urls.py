@@ -27,6 +27,10 @@ urlpatterns = [
 
     
     path('api/auth/', include('useraccount.urls')),
-    path('api/chat/',include('chat.urls'))
+    path('api/chat/',include('chat.urls')),
+    
+    
+    path('api/', include('reviews_and_ratings.urls')),
+
 
 ]
