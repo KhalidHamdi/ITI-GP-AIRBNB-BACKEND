@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings 
 from cloudinary.models import CloudinaryField
+from useraccount.models import User
 
 
 class Property(models.Model):
@@ -17,6 +18,8 @@ class Property(models.Model):
     category = models.CharField(max_length=255)
     image = CloudinaryField('image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    landlord = models.ForeignKey(User, related_name='properties', on_delete=models.CASCADE)
+    
     def image_url(self):
         return f'{settings.WEBSITE_URL}{self.image.url}'
     def __str__(self):

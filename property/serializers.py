@@ -32,7 +32,8 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
             'bathrooms',
             'guests',
             'country',
-            'category'
+            'category',
+            'landlord',
         )
 
     def get_image_url(self, obj):
