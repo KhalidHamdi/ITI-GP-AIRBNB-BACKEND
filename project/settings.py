@@ -91,6 +91,10 @@ REST_FRAMEWORK = {
     )
 }
 
+REST_AUTH_SERIALIZERS = {
+    'LOGIN_SERIALIZER': 'useraccount.serializers.CustomLoginSerializer',
+}
+
 # Application definition
 
 INSTALLED_APPS = [
