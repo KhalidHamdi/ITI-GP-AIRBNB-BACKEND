@@ -147,7 +147,7 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
-CORS_ALLOW_CREDENTIALS = True
+
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -169,6 +169,8 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'project.urls'
 

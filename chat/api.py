@@ -4,7 +4,8 @@ from .models import Conversation, ConversationMessage
 from .serializers import ConversationListSerializer, ConversationDetailSerializer, ConversationMessageSerializer
 
 from useraccount.models import User
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny , IsAuthenticated
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -15,8 +16,12 @@ def conversations_list(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated]) 
 def conversations_detail(request, pk):
-    conversation = request.user.conversations.get(pk=pk)
+    try:
+        conversation = request.user.conversations.get(pk=pk)
+    except Conversation.DoesNotExist:
+        return JsonResponse({'error': 'Conversation not found.'}, status=404)
 
     conversation_serializer = ConversationDetailSerializer(conversation, many=False)
     messages_serializer = ConversationMessageSerializer(conversation.messages.all(), many=True)
@@ -27,15 +32,19 @@ def conversations_detail(request, pk):
     }, safe=False)
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def conversations_start(request, user_id):
+    try:
+        user = User.objects.get(pk=user_id)
+    except User.DoesNotExist:
+        return JsonResponse({'error': 'User not found.'}, status=404)
+
     conversations = Conversation.objects.filter(users__in=[user_id]).filter(users__in=[request.user.id])
 
-    if conversations.count() > 0:
+    if conversations.exists():
         conversation = conversations.first()
-        
         return JsonResponse({'success': True, 'conversation_id': conversation.id})
     else:
-        user = User.objects.get(pk=user_id)
         conversation = Conversation.objects.create()
         conversation.users.add(request.user)
         conversation.users.add(user)
