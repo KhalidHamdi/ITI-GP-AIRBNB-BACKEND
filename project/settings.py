@@ -105,6 +105,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',  
     'dj_rest_auth',
     'dj_rest_auth.registration',
+    'drf_yasg',
 
 
     # project main apps
@@ -116,6 +117,8 @@ INSTALLED_APPS = [
 
     'cloudinary',
     'cloudinary_storage',
+    
+    'reviews_and_ratings',
 ]
 
 MIDDLEWARE = [
