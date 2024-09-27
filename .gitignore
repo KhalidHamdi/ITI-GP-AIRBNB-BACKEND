@@ -22,3 +22,5 @@ media/
 tmp/
 temp/
 .vscode
+
+cloudinary_storage

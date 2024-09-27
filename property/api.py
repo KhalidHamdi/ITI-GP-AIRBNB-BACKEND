@@ -9,9 +9,16 @@ from django.shortcuts import get_object_or_404
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_list(request):
-    properties = Property.objects.all()
+    category = request.GET.get('category', None)
+    if category:
+        properties = Property.objects.filter(category=category)
+    else:
+        properties = Property.objects.all()
+    
     serializer = PropertiesListSerializer(properties, many=True)
-    return JsonResponse({'data': serializer.data})
+    return JsonResponse({
+        'data': serializer.data
+    })
 
 @api_view(['POST'])
 @permission_classes([AllowAny])  
