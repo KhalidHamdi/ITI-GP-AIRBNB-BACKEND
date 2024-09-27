@@ -2,9 +2,8 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework import status
-from .forms import PropertyForm
+from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, PropertyCreateSerializer
 from .models import Property
-from .serializers import PropertiesListSerializer, PropertiesDetailSerializer
 from django.shortcuts import get_object_or_404
 
 @api_view(['GET'])
@@ -24,23 +23,17 @@ def properties_list(request):
 @api_view(['POST'])
 @permission_classes([AllowAny])  
 def create_property(request):
-    form = PropertyForm(request.POST, request.FILES)
+    serializer = PropertyCreateSerializer(data=request.data)
 
-    if form.is_valid():
-        property = form.save(commit=False)
-        property.save()
-
-        return JsonResponse({'success': True})
+    if serializer.is_valid():
+        serializer.save() 
+        return JsonResponse({'success': True, 'property': serializer.data}, status=status.HTTP_201_CREATED)
     else:
-        print('error', form.errors, form.non_field_errors)
-        return JsonResponse({'errors': form.errors.as_json()}, status=400)
+        return JsonResponse({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_detail(request, pk):
-    try:
-        property = Property.objects.get(pk=pk)
-        serializer = PropertiesDetailSerializer(property)
-        return JsonResponse(serializer.data)
-    except Property.DoesNotExist:
-        return JsonResponse({'error': 'Property not found'}, status=status.HTTP_404_NOT_FOUND)
+    property = get_object_or_404(Property, pk=pk)
+    serializer = PropertiesDetailSerializer(property)
+    return JsonResponse(serializer.data)
