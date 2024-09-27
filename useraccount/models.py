@@ -70,4 +70,4 @@ class User(AbstractBaseUser, PermissionsMixin):
             return ''
         
     def __str__(self):
-        return self.name or "Unnamed User"
+        return self.name if self.name else self.email 

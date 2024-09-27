@@ -271,3 +271,5 @@ CLOUDINARY_STORAGE = {
 }
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+OPENCAGE_API_KEY = '3a389cf56bd542119af218f4ca50cd66'
