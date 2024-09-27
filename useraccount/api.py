@@ -5,7 +5,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from .models import User
 from .serializers import UserDetailSerializer
 
-from property.serializers import ReservationsListSerializer
+from property.serializers import PropertiesListSerializer
 
 
 @api_view(['GET'])
@@ -26,5 +26,5 @@ def reservations_list(request):
     print('user', request.user)
     print(reservations)
     
-    serializer = ReservationsListSerializer(reservations, many=True)
+    serializer = PropertiesListSerializer(reservations, many=True)
     return JsonResponse(serializer.data, safe=False)

@@ -76,9 +76,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 AUTHENTICATION_BACKENDS = [
-    'useraccount.authentication_backends.EmailBackend',  # Custom backend
-    'django.contrib.auth.backends.ModelBackend',
-    'allauth.account.auth_backends.AuthenticationBackend',
+    'useraccount.authentication_backends.EmailBackend',  # Custom Email Backend
+    'django.contrib.auth.backends.ModelBackend',          # Default Backend
 ]
 
 
@@ -95,10 +94,14 @@ REST_AUTH_SERIALIZERS = {
     'LOGIN_SERIALIZER': 'useraccount.serializers.CustomLoginSerializer',
 }
 
+AUTH_USER_MODEL = 'useraccount.User'
+
+
 # Application definition
 
 INSTALLED_APPS = [
     'daphne',
+    'useraccount',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -119,7 +122,6 @@ INSTALLED_APPS = [
 
     # project main apps
     'property',
-    'useraccount',
     'Reservation' , 
     
     'chat',
@@ -137,7 +139,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'allauth.account.middleware.AccountMiddleware', 
+    'allauth.account.middleware.AccountMiddleware',
 
 ]
 
