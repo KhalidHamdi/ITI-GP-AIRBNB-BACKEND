@@ -1,10 +1,13 @@
 from django.http import JsonResponse
+
+from rest_framework.response import Response
 from rest_framework.decorators import api_view,permission_classes
+
 from .models import Conversation, ConversationMessage
 from .serializers import ConversationListSerializer, ConversationDetailSerializer, ConversationMessageSerializer
 
 from useraccount.models import User
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny 
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
