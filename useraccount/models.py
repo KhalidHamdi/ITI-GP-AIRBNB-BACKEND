@@ -1,7 +1,9 @@
-from django.db import models
 import uuid
+
 from django.conf import settings
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, Group, Permission
+from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager
+from django.db import models
+
 
 class CustomUserManager(UserManager):
     def _create_user(self, name, email, password, **extra_fields):
@@ -39,24 +41,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(blank=True, null=True)
 
-    groups = models.ManyToManyField(
-        Group,
-        related_name='custom_user_set',  # Unique related_name for 'groups'
-        blank=True,
-        help_text='The groups this user belongs to.',
-        verbose_name='groups',
-        related_query_name='custom_user'
-    )
-    
-    user_permissions = models.ManyToManyField(
-        Permission,
-        related_name='custom_user_permissions_set',  # Unique related_name for 'user_permissions'
-        blank=True,
-        help_text='Specific permissions for this user.',
-        verbose_name='user permissions',
-        related_query_name='custom_user_permissions'
-    )
-
     objects = CustomUserManager()
 
     USERNAME_FIELD = 'email'
@@ -68,6 +52,3 @@ class User(AbstractBaseUser, PermissionsMixin):
             return f'{settings.WEBSITE_URL}{self.avatar.url}'
         else:
             return ''
-        
-    def __str__(self):
-        return self.name

@@ -5,8 +5,7 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from .models import User
 from .serializers import UserDetailSerializer
 
-from property.serializers import PropertiesListSerializer
-from Reservation.serializers import ReservationsListSerializer
+from property.serializers import ReservationsListSerializer
 
 
 @api_view(['GET'])
