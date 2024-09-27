@@ -16,4 +16,6 @@ class Review(models.Model):
         unique_together = ('property', 'user')
 
     def __str__(self):
-        return f"Review by {self.user.name} for {self.property.title}"
+        return (self.comment)
+    
+    
