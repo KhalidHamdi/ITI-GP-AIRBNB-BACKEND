@@ -31,22 +31,16 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
     average_rating = serializers.SerializerMethodField()
     reviews_count = serializers.SerializerMethodField()
+    latitude = serializers.ReadOnlyField()
+    longitude = serializers.ReadOnlyField()
 
     class Meta:
         model = Property
         fields = (
-            'id',
-            'title',
-            'description',
-            'price_per_night',
-            'image_url',
-            'bedrooms',
-            'bathrooms',
-            'guests',
-            'country',
-            'category',
-            'average_rating',
-            'reviews_count',
+            'id', 'title', 'description', 'price_per_night', 'image_url',
+            'bedrooms', 'bathrooms', 'guests', 'city', 'address',
+            'country', 'category', 'latitude', 'longitude', 
+            'average_rating', 'reviews_count',
         )
 
     def get_image_url(self, obj):
@@ -73,4 +67,6 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
             'country_code',
             'category',
             'image',  
+            'city',
+            'address',
         )
