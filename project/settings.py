@@ -41,9 +41,12 @@ ALLOWED_HOSTS = ['*']
 WEBSITE_URL='http://localhost:8000'
 
 CHANNEL_LAYERS={
-    'default':{
-        'BACKEND':'channels_layers.InMemoryChannelLayer',
-    }
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
 }
 
 DJANGO_REST_FRAMEWORK = {
@@ -88,6 +91,7 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
+    'channels',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',

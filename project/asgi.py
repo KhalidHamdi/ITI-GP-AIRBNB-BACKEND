@@ -33,3 +33,12 @@ application = ProtocolTypeRouter({
         )
     ),
 })
+
+# application = ProtocolTypeRouter({
+#     "http": get_asgi_application(),
+#     "websocket": AllowedHostsOriginValidator(
+#         URLRouter(
+#             routing.websocket_urlpatterns 
+#         )
+#     ),
+# })

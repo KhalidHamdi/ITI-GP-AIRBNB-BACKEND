@@ -27,5 +27,5 @@ class ConversationMessage(models.Model):
     conversation = models.ForeignKey(Conversation, related_name='messages', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-
-
+    def  __str__(self):
+        return f"Message from {self.created_by} to {self.sent_to}"
