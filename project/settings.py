@@ -32,7 +32,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-z^0zbvvg*ap3wt#^8bo9xblpl_r&hvsn56s1odspv!bldvx3#g' 
+# SECRET_KEY = 'django-insecure-z^0zbvvg*ap3wt#^8bo9xblpl_r&hvsn56s1odspv!bldvx3#g' 
+SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -208,28 +209,17 @@ ASGI_APPLICATION = 'project.asgi.application'
 
 DB_SELECTION = config('DB_SELECTION', default='PROD')
 
-if DB_SELECTION == 'TEST':
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('TEST_DB_NAME'),
-            'USER': config('TEST_DB_USER'),
-            'PASSWORD': config('TEST_DB_PASSWORD'),
-            'HOST': config('TEST_DB_HOST'),
-            'PORT': config('TEST_DB_PORT'),
-        }
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('PGDATABASE'),
+        'USER': config('PGUSER'),
+        'PASSWORD': config('PGPASSWORD'),
+        'HOST': config('PGHOST'),
+        'PORT': config('DB_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': config('PROD_DB_NAME'),
-            'USER': config('PROD_DB_USER'),
-            'PASSWORD': config('PROD_DB_PASSWORD'),
-            'HOST': config('PROD_DB_HOST'),
-            'PORT': config('PROD_DB_PORT'),
-        }
-    }
+}
 
 
 # Password validation
@@ -291,7 +281,6 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# OPENCAGE_API_KEY = '3a389cf56bd542119af218f4ca50cd66'
 OPENCAGE_API_KEY = config('OPENCAGE_API_KEY')
 
 

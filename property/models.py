@@ -22,6 +22,7 @@ class Property(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     
+    
     def image_url(self):
         return f'{settings.WEBSITE_URL}{self.image.url}'
 
