@@ -49,6 +49,8 @@ urlpatterns = [
     
     
     path('api/', include('reviews_and_ratings.urls')),
-
+    
+    
+    path('api/payments/', include('payments.urls')),
 
 ]

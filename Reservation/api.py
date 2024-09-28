@@ -50,7 +50,7 @@ def book_property(request, pk):
             created_by=request.user
             # created_by=None,           
         )
-        return JsonResponse({'success': True})
+        return JsonResponse({'success': True, 'reservation_id': Reservation.id})
     except Exception as e:
         print('Error from server: ', e)
-        return JsonResponse({'success': False})
+        return JsonResponse({'success': False, 'error': str(e)})

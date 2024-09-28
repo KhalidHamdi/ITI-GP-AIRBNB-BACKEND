@@ -1,7 +1,6 @@
 # payments/paymob.py
 import requests
-PAYMOB_API_KEY = 'ZXlKaGJHY2lPaUpJVXpVeE1pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SmpiR0Z6Y3lJNklrMWxjbU5vWVc1MElpd2ljSEp2Wm1sc1pWOXdheUk2T1RrMk5ETTJMQ0p1WVcxbElqb2lhVzVwZEdsaGJDSjkuWnc2WEcyVGYybkxSNE83b0wwai1Ea1FESzVFYlNaSVh5dFBTLUNSZHpkQTk1V29RRjYzTlQ0SFRmeFRjMWZ4SHNKWVB4WERtVXJKVjBzMHZtY3VILVE='
-PAYMOB_INTEGRATION_ID = '4836448'
+from project.settings import PAYMOB_API_KEY, PAYMOB_INTEGRATION_ID
 
 def get_paymob_token():
     url = "https://accept.paymob.com/api/auth/tokens"
@@ -28,17 +27,17 @@ def get_payment_key(token, order_id, amount_cents):
         "currency": "EGP",
         "order_id": order_id,
         "billing_data": {
-            "first_name": "John",
-            "last_name": "Doe",
-            "email": "example@example.com",
-            "phone_number": "+201234567890",
-            "apartment": "803",
-            "floor": "42",
-            "building": "123",
-            "street": "Sample Street",
+            "first_name": "Test",
+            "last_name": "User",
+            "email": "test@test.com",
+            "phone_number": "+201011234567",
+            "apartment": "NA",
+            "floor": "NA",
+            "street": "NA",
+            "building": "NA",
             "city": "Cairo",
             "country": "EG",
-            "postal_code": "12345"
+            "state": "NA"
         },
         "integration_id": PAYMOB_INTEGRATION_ID
     }
