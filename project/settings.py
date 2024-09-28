@@ -20,6 +20,7 @@ import cloudinary.uploader
 import cloudinary.api
 
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -48,18 +49,25 @@ CHANNEL_LAYERS={
 
 DJANGO_REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
+       'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
     ],
 }
 
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    # Add any other authentication backends you're using
+]
+
 
 SITE_ID = 1
 
+REST_USE_JWT = True
 SIMPLE_JWT = {
+    'AUTH_HEADER_TYPES': ('Bearer',),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
     "ROTATE_REFRESH_TOKEN": False,
@@ -69,12 +77,12 @@ SIMPLE_JWT = {
     "ALOGRIGTHM": "HS512",
 }
 
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'  # Specify the username field
+ACCOUNT_USERNAME_REQUIRED = True                 # Make username required
+ACCOUNT_AUTHENTICATION_METHOD = 'email'          # Authentication via email
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = False
-ACCOUNT_AUTHENTICATION_METHOD = 'email'
-ACCOUNT_EMAIL_VERIFICATION = 'none'
-
+ACCOUNT_EMAIL_VERIFICATION = 'none'              # As per your current settings
+AUTH_USER_MODEL = 'useraccount.User'
 
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -89,6 +97,7 @@ REST_FRAMEWORK = {
 
 INSTALLED_APPS = [
     'daphne',
+    'useraccount',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -110,7 +119,6 @@ INSTALLED_APPS = [
 
     # project main apps
     'property',
-    'useraccount',
     'Reservation' , 
     
     'chat',
@@ -144,7 +152,6 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000', 
     'http://127.0.0.1:3000', 
     'http://localhost:5173',
-
 ]
 
 CORS_ALLOW_CREDENTIALS = True
@@ -195,16 +202,31 @@ ASGI_APPLICATION = 'project.asgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
-        'PORT': config('DB_PORT', default='5432'),
+
+DB_SELECTION = config('DB_SELECTION', default='PROD')
+
+if DB_SELECTION == 'TEST':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('TEST_DB_NAME'),
+            'USER': config('TEST_DB_USER'),
+            'PASSWORD': config('TEST_DB_PASSWORD'),
+            'HOST': config('TEST_DB_HOST'),
+            'PORT': config('TEST_DB_PORT'),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': config('PROD_DB_NAME'),
+            'USER': config('PROD_DB_USER'),
+            'PASSWORD': config('PROD_DB_PASSWORD'),
+            'HOST': config('PROD_DB_HOST'),
+            'PORT': config('PROD_DB_PORT'),
+        }
+    }
 
 
 # Password validation
@@ -267,3 +289,5 @@ CLOUDINARY_STORAGE = {
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 OPENCAGE_API_KEY = '3a389cf56bd542119af218f4ca50cd66'
+
+CORS_ALLOW_ALL_ORIGINS = True
