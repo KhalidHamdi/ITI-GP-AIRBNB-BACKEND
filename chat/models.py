@@ -9,14 +9,15 @@ class Conversation(models.Model):
     users=models.ManyToManyField(User, related_name='conversations')
     created_at= models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    def __str__(self):
-        users = self.users.all()
-        if users.exists():
-            user_list = ', '.join(user.name for user in users)
-            return f"Conversation between {user_list}"
-        else:
-            print(f"Conversation ID {self.id} has no users.") 
-            return "Conversation with no users"
+    # def __str__(self):
+    #     users = self.users.all()
+    #     if users.exists():
+    #         user_list = ', '.join(user.name for user in users)
+    #         return f"Conversation between {user_list}"
+    #     else:
+    #         print(f"Conversation ID {self.id} has no users.") 
+    #         return "Conversation with no users"
+
 
 
 class ConversationMessage(models.Model):
@@ -27,5 +28,6 @@ class ConversationMessage(models.Model):
     conversation = models.ForeignKey(Conversation, related_name='messages', on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(auto_now=True)
-    def  __str__(self):
-        return f"Message from {self.created_by} to {self.sent_to}"
+    # def  __str__(self):
+    #     return f"Message from {self.created_by} to {self.sent_to}"
+

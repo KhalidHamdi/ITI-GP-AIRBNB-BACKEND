@@ -1,4 +1,5 @@
 from django.urls import path
+from .views import GeocodeView
 
 from . import api
 
@@ -8,5 +9,9 @@ urlpatterns = [
     path('create/', api.create_property, name='api_create_property'),
     path('<uuid:pk>/', api.properties_detail, name='api_properties_detail'),
     path('search/',api.search_properties,name='search_properties'),
-    path('search_suggestions/',api.search_suggestions, name='search_suggestions'),
+    path('search_suggestions/',api.search_suggestions, name='search_suggestions'),    
+    # URL Pattern for Geocode Endpoint :) 
+    path('geocode/', GeocodeView.as_view(), name='geocode'),
+
+
 ]

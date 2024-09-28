@@ -1,6 +1,8 @@
 from .models import Property
 from rest_framework import serializers
 from django.db.models import Avg
+from useraccount.serializers import UserDetailSerializer
+
 
 class PropertiesListSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
@@ -33,6 +35,7 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
     reviews_count = serializers.SerializerMethodField()
     latitude = serializers.ReadOnlyField()
     longitude = serializers.ReadOnlyField()
+    landlord = UserDetailSerializer(read_only=True, many=False)
 
     class Meta:
         model = Property
@@ -40,7 +43,7 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'price_per_night', 'image_url',
             'bedrooms', 'bathrooms', 'guests', 'city', 'address',
             'country', 'category', 'latitude', 'longitude', 
-            'average_rating', 'reviews_count',
+            'average_rating', 'reviews_count','landlord',
         )
 
     def get_image_url(self, obj):
