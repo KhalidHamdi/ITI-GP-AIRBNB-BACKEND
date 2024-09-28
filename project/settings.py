@@ -18,6 +18,8 @@ import cloudinary_storage
 import cloudinary
 import cloudinary.uploader
 import cloudinary.api
+from decouple import config
+
 
 
 
@@ -288,6 +290,8 @@ CLOUDINARY_STORAGE = {
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-OPENCAGE_API_KEY = '3a389cf56bd542119af218f4ca50cd66'
+# OPENCAGE_API_KEY = '3a389cf56bd542119af218f4ca50cd66'
+OPENCAGE_API_KEY = config('OPENCAGE_API_KEY')
+
 
 CORS_ALLOW_ALL_ORIGINS = True
