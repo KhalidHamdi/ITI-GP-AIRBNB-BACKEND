@@ -5,17 +5,17 @@ from rest_framework import status
 from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, PropertyCreateSerializer
 from .models import Property
 from django.shortcuts import get_object_or_404
+from .filter import PropertyFilter ;
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_list(request):
-    category = request.GET.get('category', None)
-    if category:
-        properties = Property.objects.filter(category=category)
-    else:
-        properties = Property.objects.all()
+    # Apply filter based on the request parameters
+    filterset = PropertyFilter(request.GET, queryset=Property.objects.all())
     
-    serializer = PropertiesListSerializer(properties, many=True)
+    # Use the filtered queryset for serialization
+    serializer = PropertiesListSerializer(filterset.qs, many=True)
+    
     return JsonResponse({
         'data': serializer.data
     })

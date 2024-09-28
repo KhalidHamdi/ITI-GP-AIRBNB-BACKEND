@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     'property',
     'useraccount',
     'Reservation' , 
+    'django_filters',
     
     'chat',
 
