@@ -3,6 +3,8 @@ import uuid
 from django.conf import settings
 from cloudinary.models import CloudinaryField
 from opencage.geocoder import OpenCageGeocode
+from useraccount.models import User
+
 
 class Property(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -21,7 +23,8 @@ class Property(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    
+    landlord = models.ForeignKey(User, related_name='properties', on_delete=models.CASCADE ,null = False)
+
     
     def image_url(self):
         return f'{settings.WEBSITE_URL}{self.image.url}'
