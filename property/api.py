@@ -19,10 +19,10 @@ def properties_list(request):
         return JsonResponse({
             'data': serializer.data
         })
-        
-        
+
+
 @api_view(['POST'])
-@permission_classes([AllowAny])  
+@permission_classes([AllowAny])
 def create_property(request):
     serializer = PropertyCreateSerializer(data=request.data)
 
