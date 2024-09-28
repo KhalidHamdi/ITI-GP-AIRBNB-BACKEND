@@ -37,3 +37,31 @@ def properties_detail(request, pk):
     property = get_object_or_404(Property, pk=pk)
     serializer = PropertiesDetailSerializer(property)
     return JsonResponse(serializer.data)
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def search_properties(request):
+    city=request.GET.get('city','')
+    country=request.GET.get('country','')
+    guests=request.GET.get('guests')
+
+    properties=Property.objects.all()
+
+    if city:
+        properties=properties.filter(city__icontains=city)
+    if  country:
+        properties=properties.filter(country__icontains=country)
+    if  guests:
+        properties=properties.filter(guests__gte=guests)
+    
+    serializer=PropertiesListSerializer(properties,many=True)
+    return  JsonResponse({'data':serializer.data})
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def search_suggestions(request):
+    query = request.GET.get('query', '')
+    suggestions = Property.objects.filter(city__icontains=query).values_list('city', flat=True).distinct()
+    suggestions_list = list(suggestions)
+    return JsonResponse(suggestions_list[:5],safe=False)
