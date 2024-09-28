@@ -1,12 +1,12 @@
 # Reservation/views.py
 from rest_framework import generics, permissions
 from .models import Reservation
-from .serializers import ReservationSerializer
+from .serializers import ReservationsListSerializer
 from property.models import Property
 from django.shortcuts import get_object_or_404
 
 class ReservationListView(generics.ListAPIView):
-    serializer_class = ReservationSerializer
+    serializer_class = ReservationsListSerializer
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
