@@ -41,12 +41,9 @@ ALLOWED_HOSTS = ['*']
 WEBSITE_URL='http://localhost:8000'
 
 CHANNEL_LAYERS={
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
+    'default':{
+        'BACKEND':'channels_layers.InMemoryChannelLayer',
+    }
 }
 
 DJANGO_REST_FRAMEWORK = {
@@ -91,7 +88,6 @@ REST_FRAMEWORK = {
 # Application definition
 
 INSTALLED_APPS = [
-    'channels',
     'daphne',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -116,7 +112,6 @@ INSTALLED_APPS = [
     'property',
     'useraccount',
     'Reservation' , 
-    'django_filters',
     
     'chat',
 
@@ -152,7 +147,7 @@ CORS_ALLOWED_ORIGINS = [
 
 ]
 
-
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_METHODS = [
     'DELETE',
@@ -174,8 +169,6 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
-
-CORS_ALLOW_ALL_ORIGINS = True
 
 ROOT_URLCONF = 'project.urls'
 
@@ -205,12 +198,12 @@ ASGI_APPLICATION = 'project.asgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': config('DB_NAME'),
-        'USER': config('DB_USER'),
-        'PASSWORD': config('DB_PASSWORD'),
-        'HOST': config('DB_HOST'),
+        'NAME': config('PGDATABASE'),
+        'USER': config('PGUSER'),
+        'PASSWORD': config('PGPASSWORD'),
+        'HOST': config('PGHOST'),
         'PORT': config('DB_PORT', default='5432'),
-    }
+        }
 }
 
 
