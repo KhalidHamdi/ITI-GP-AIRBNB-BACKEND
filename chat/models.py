@@ -19,6 +19,7 @@ class Conversation(models.Model):
     #         return "Conversation with no users"
 
 
+
 class ConversationMessage(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     body = models.TextField()
@@ -29,3 +30,4 @@ class ConversationMessage(models.Model):
     modified_at = models.DateTimeField(auto_now=True)
     # def  __str__(self):
     #     return f"Message from {self.created_by} to {self.sent_to}"
+

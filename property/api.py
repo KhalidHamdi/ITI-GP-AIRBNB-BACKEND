@@ -5,6 +5,7 @@ from rest_framework import status
 from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, PropertyCreateSerializer
 from .models import Property
 from django.shortcuts import get_object_or_404
+from .filter import PropertyFilter ;
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -19,7 +20,6 @@ def properties_list(request):
         return JsonResponse({
             'data': serializer.data
         })
-
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
