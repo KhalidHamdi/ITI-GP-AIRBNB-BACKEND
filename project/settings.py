@@ -21,6 +21,7 @@ import cloudinary.api
 from decouple import config
 
 
+DEBUG = True
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -132,7 +133,7 @@ INSTALLED_APPS = [
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',  
     'django.middleware.common.CommonMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -144,11 +145,7 @@ MIDDLEWARE = [
 
 ]
 
-# REST_FRAMEWORK = {
-#     "DEFAULT_PERMISSION_CLASSES": [
-#         "rest_framework.permissions.AllowAny"
-#     ]
-# }
+
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000', 
@@ -178,6 +175,10 @@ CORS_ALLOW_HEADERS = [
     'x-csrftoken',
     'x-requested-with',
 ]
+
+# CORS_ALLOW_ALL_ORIGINS = True
+
+
 
 ROOT_URLCONF = 'project.urls'
 
@@ -294,4 +295,3 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 OPENCAGE_API_KEY = config('OPENCAGE_API_KEY')
 
 
-CORS_ALLOW_ALL_ORIGINS = True
