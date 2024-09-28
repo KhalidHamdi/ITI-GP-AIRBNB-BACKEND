@@ -10,18 +10,19 @@ from .filter import PropertyFilter ;
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_list(request):
-    # Apply filter based on the request parameters
-    filterset = PropertyFilter(request.GET, queryset=Property.objects.all())
-    
-    # Use the filtered queryset for serialization
-    serializer = PropertiesListSerializer(filterset.qs, many=True)
-    
-    return JsonResponse({
-        'data': serializer.data
-    })
+        properties = Property.objects.all()
+
+        landlord_id = request.GET.get('landlord_id', '')
+        if landlord_id:
+            properties = properties.filter(landlord_id=landlord_id)
+
+        serializer = PropertiesListSerializer(properties, many=True)
+        return JsonResponse({
+            'data': serializer.data
+        })
 
 @api_view(['POST'])
-@permission_classes([AllowAny])  
+@permission_classes([AllowAny])
 def create_property(request):
     serializer = PropertyCreateSerializer(data=request.data)
 
