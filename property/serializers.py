@@ -73,3 +73,8 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
             'city',
             'address',
         )
+        
+    def create(self, validated_data):
+        request = self.context.get('request')
+        validated_data['landlord'] = request.user  # Assign the logged-in user as the landlord
+        return super().create(validated_data)

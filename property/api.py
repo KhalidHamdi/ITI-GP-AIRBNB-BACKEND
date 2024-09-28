@@ -6,6 +6,8 @@ from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, P
 from .models import Property
 from django.shortcuts import get_object_or_404
 from .filter import PropertyFilter ;
+from rest_framework.permissions import IsAuthenticated
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -22,9 +24,9 @@ def properties_list(request):
         })
 
 @api_view(['POST'])
-@permission_classes([AllowAny])
+@permission_classes([IsAuthenticated])  # Ensure only authenticated users can access this endpoint
 def create_property(request):
-    serializer = PropertyCreateSerializer(data=request.data)
+    serializer = PropertyCreateSerializer(data=request.data, context={'request': request})
 
     if serializer.is_valid():
         serializer.save() 
