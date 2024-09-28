@@ -43,7 +43,10 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-WEBSITE_URL='http://localhost:8000'
+# WEBSITE_URL='http://localhost:8000'
+
+WEBSITE_URL = 'http://localhost:5173'  # Frontend URL
+
 
 CHANNEL_LAYERS={
     'default': {
@@ -83,7 +86,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
     "SIGNING_KEY": "acomplexkey",
-    "ALOGRIGTHM": "HS512",
+    "ALGORITHM": "HS512",  
 }
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'  # Specify the username field
@@ -115,6 +118,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',  # Add this line
+    
     
     # Other apps for authintication :)
     'rest_framework',
@@ -159,6 +164,16 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  
 
+
+# REST_AUTH_REGISTER = {
+#     'PASSWORD_RESET_CONFIRM_URL': 'http://localhost:5173/reset-password/{uid}/{token}/',  # Frontend URL
+# }
+
+REST_AUTH = {
+    'PASSWORD_RESET_CONFIRM_URL': 'http://localhost:5173/reset-password/{uid}/{token}/',  # Frontend URL
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,  # Optional: Require password retype
+    'PASSWORD_RESET_TIMEOUT': 3600,  # 1 hour, adjust as needed
+}
 #--------------------------------------------------------------------------------------
 
 
@@ -202,7 +217,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # Add your templates directory here
+        'DIRS': [BASE_DIR / 'templates'],  # Ensure this path is correct
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -210,6 +225,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'useraccount.context_processors.website_url',  # Add this line
+
             ],
         },
     },
