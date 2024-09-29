@@ -15,20 +15,19 @@ This project was developed by a group of 5 talented software engineers studying 
    - [LinkedIn](https://www.linkedin.com/in/ibrahim1saber/)
    
 2. **Khaled Hamdy**
-   - GitHub: [https://github.com/khaledhamdy](https://github.com/KhalidHamdi) *(Replace with actual link if available)*
-   - LinkedIn: [https://www.linkedin.com/in/khaledhamdy/](https://www.linkedin.com/in/khalidhamdii/) *(Replace with actual link if available)*
+   - [GitHub](https://github.com/KhalidHamdi)
+   - [LinkedIn](https://www.linkedin.com/in/khalidhamdii/)
+4. **Basmala Salem**
+   - GitHub: [https://github.com/basmalasalem](#) 
+   - LinkedIn: [https://www.linkedin.com/in/basmalasalem/](#) 
 
-3. **Basmala Salem**
-   - GitHub: [https://github.com/basmalasalem](#) *(Replace with actual link if available)*
-   - LinkedIn: [https://www.linkedin.com/in/basmalasalem/](#) *(Replace with actual link if available)*
+5. **David Emad**
+   - GitHub: [https://github.com/davidemad](#) 
+   - LinkedIn: [https://www.linkedin.com/in/davidemad/](#) 
 
-4. **David Emad**
-   - GitHub: [https://github.com/davidemad](#) *(Replace with actual link if available)*
-   - LinkedIn: [https://www.linkedin.com/in/davidemad/](#) *(Replace with actual link if available)*
-
-5. **Michael Emad**
-   - GitHub: [https://github.com/michaelemad](#) *(Replace with actual link if available)*
-   - LinkedIn: [https://www.linkedin.com/in/michaelemad/](#) *(Replace with actual link if available)*
+6. **Michael Emad**
+   - GitHub: [https://github.com/michaelemad](#) 
+   - LinkedIn: [https://www.linkedin.com/in/michaelemad/](#) 
 ---
 
 ## Table of Contents
