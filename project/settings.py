@@ -43,7 +43,7 @@ DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 
-WEBSITE_URL='http://localhost:8000'
+WEBSITE_URL='http://localhost:5173'
 
 CHANNEL_LAYERS={
     'default': {
@@ -83,7 +83,7 @@ SIMPLE_JWT = {
     "BLACKLIST_AFTER_ROTATION": False,
     "UPDATE_LAST_LOGIN": True,
     "SIGNING_KEY": "acomplexkey",
-    "ALOGRIGTHM": "HS512",
+    "ALGORITHM": "HS512",
 }
 
 ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'  # Specify the username field
@@ -116,6 +116,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
     
     # Other apps for authintication :)
     'rest_framework',
@@ -135,7 +136,12 @@ INSTALLED_APPS = [
     'Reservation' ,
     'chat',
     'reviews_and_ratings',
+    
+    'favorite'
 ]
+
+
+
 
 #--------------------------------------------------------------------------------------
 
@@ -159,6 +165,22 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER')  
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  
+
+# LOGGING = {
+#     'version': 1,
+#     'disable_existing_loggers': False,
+#     'handlers': {
+#         'console': {
+#             'class': 'logging.StreamHandler',
+#         },
+#     },
+#     'loggers': {
+#         'django': {
+#             'handlers': ['console'],
+#             'level': 'DEBUG',  # Change to 'INFO' or 'WARNING' in production
+#         },
+#     },
+# }
 
 #--------------------------------------------------------------------------------------
 
@@ -212,6 +234,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'useraccount.context_processors.website_url',  
+
             ],
         },
     },
