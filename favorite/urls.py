@@ -1,8 +1,11 @@
+
+
 from django.urls import path
 from . import api
+from uuid import UUID
 
 urlpatterns = [
-    path('favorites/', api.list_favorites, name='list_favorites'),
-    path('favorites/add/<int:pk>/', api.add_favorite, name='add_favorite'),
-    path('favorites/remove/<int:pk>/', api.remove_favorite, name='remove_favorite'),
+    path('', api.list_favorites, name='list_favorites'),
+    path('add/<uuid:pk>/', api.add_favorite, name='add_favorite'),  
+    path('remove/<uuid:pk>/', api.remove_favorite, name='remove_favorite'),
 ]

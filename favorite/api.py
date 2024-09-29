@@ -28,7 +28,7 @@ def remove_favorite(request, pk):
     favorite = Favorite.objects.filter(user=user, property=property).first()
     if favorite:
         favorite.delete()
-        return JsonResponse({'success': True}, status=204)
+        return JsonResponse({'success': True}, status=200)
     else:
         return JsonResponse({'error': 'Favorite not found.'}, status=404)
 

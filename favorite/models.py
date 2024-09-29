@@ -2,6 +2,7 @@ from django.db import models
 from useraccount.models import User
 from property.models import Property
 
+
 class Favorite(models.Model):
     user = models.ForeignKey(User, related_name='favorites', on_delete=models.CASCADE)
     property = models.ForeignKey(Property, related_name='favorited_by', on_delete=models.CASCADE)
