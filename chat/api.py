@@ -29,6 +29,9 @@ def conversations_detail(request, pk):
         'messages': messages_serializer.data
     }, safe=False)
 
+
+
+
 @api_view(['GET'])
 def conversations_start(request, user_id):
     conversations = Conversation.objects.filter(users__in=[user_id]).filter(users__in=[request.user.id])
