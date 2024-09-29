@@ -8,12 +8,12 @@
 
 ## Repository Stats
 
-![GitHub forks](https://img.shields.io/github/forks/ahmedabougabal/mernStackMilestoneProject_ITI?style=social)
-![GitHub issues](https://img.shields.io/github/issues/ahmedabougabal/mernStackMilestoneProject_ITI)
-![GitHub pull requests](https://img.shields.io/github/issues-pr/ahmedabougabal/mernStackMilestoneProject_ITI)
-![GitHub contributors](https://img.shields.io/github/contributors/ahmedabougabal/mernStackMilestoneProject_ITI)
-![GitHub last commit](https://img.shields.io/github/last-commit/ahmedabougabal/mernStackMilestoneProject_ITI)
-![RepoViews](https://komarev.com/ghpvc/?username=ahmedabougabal&color=blue)
+![GitHub forks](https://img.shields.io/github/forks/KhalidHamdi/ITI-GP-AIRBNB-BACKEND?style=social)
+![GitHub issues](https://img.shields.io/github/issues/KhalidHamdi/ITI-GP-AIRBNB-BACKEND)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/KhalidHamdi/ITI-GP-AIRBNB-BACKEND)
+![GitHub contributors](https://img.shields.io/github/contributors/KhalidHamdi/ITI-GP-AIRBNB-BACKEND)
+![GitHub last commit](https://img.shields.io/github/last-commit/KhalidHamdi/ITI-GP-AIRBNB-BACKEND)
+![RepoViews](https://komarev.com/ghpvc/?username=KhalidHamdi&color=green)
 
 ## Team
 
