@@ -75,3 +75,4 @@ urlpatterns = [
     path('api/favorite/', include('favorite.urls')),
 
 ]
+

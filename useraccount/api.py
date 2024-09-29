@@ -1,6 +1,7 @@
 from django.http import JsonResponse
 
 from rest_framework.decorators import api_view, authentication_classes, permission_classes
+from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import User
 from .serializers import UserDetailSerializer
@@ -27,6 +28,7 @@ from rest_framework.response import Response
 from rest_framework.response import Response
 from dj_rest_auth.views import LoginView
 from .serializers import UserDetailSerializer
+from .serializers import UserUpdateSerializer
 
 class CustomLoginView(LoginView):
     def post(self, request, *args, **kwargs):
@@ -85,3 +87,25 @@ def reservations_list(request):
     
     serializer = ReservationsListSerializer(reservations, many=True)
     return JsonResponse(serializer.data, safe=False)
+
+
+
+
+from rest_framework.authentication import TokenAuthentication
+
+@api_view(['GET', 'PUT'])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    user = request.user
+    
+    if request.method == 'GET':
+        serializer = UserDetailSerializer(user)
+        return Response(serializer.data)
+
+    elif request.method == 'PUT':
+        serializer = UserUpdateSerializer(user, data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            return Response(UserDetailSerializer(user).data)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

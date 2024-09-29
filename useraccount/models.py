@@ -2,6 +2,7 @@ from django.db import models
 import uuid
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, Group, Permission
+from cloudinary.models import CloudinaryField
 
 
 class CustomUserManager(UserManager):
@@ -32,11 +33,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=20, unique=True )
-    avatar = models.ImageField(upload_to='uploads/avatars', blank=True, null=True)
+    avatar = CloudinaryField('image', blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
-
     date_joined = models.DateTimeField(auto_now_add=True)
     last_login = models.DateTimeField(blank=True, null=True)
 
