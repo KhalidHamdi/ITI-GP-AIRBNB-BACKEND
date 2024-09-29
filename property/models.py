@@ -40,4 +40,4 @@ class Property(models.Model):
     #         if results and len(results):
     #             self.latitude = results[0]['geometry']['lat']
     #             self.longitude = results[0]['geometry']['lng']
-        # super().save(args, **kwargs)
+    #     super().save(args, **kwargs)

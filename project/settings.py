@@ -56,7 +56,8 @@ CHANNEL_LAYERS={
 
 DJANGO_REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
-       'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ],
     'DEFAULT_PERMISSION_CLASSES': [
@@ -66,6 +67,7 @@ DJANGO_REST_FRAMEWORK = {
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
     # Add any other authentication backends you're using
 ]
 
@@ -88,21 +90,23 @@ ACCOUNT_USER_MODEL_USERNAME_FIELD = 'username'  # Specify the username field
 ACCOUNT_USERNAME_REQUIRED = True                 # Make username required
 ACCOUNT_AUTHENTICATION_METHOD = 'email'          # Authentication via email
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = 'none'              # As per your current settings
+ACCOUNT_EMAIL_VERIFICATION = 'none'             
 AUTH_USER_MODEL = 'useraccount.User'
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
-    )
+    ],
 }
 
-# Application definition
 
+#--------------------------------------------------------------------------------------
+# Application definition :
 INSTALLED_APPS = [
+    'corsheaders',
     'channels',
     'daphne',
     'useraccount',
@@ -112,7 +116,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'corsheaders',
     
     # Other apps for authintication :)
     'rest_framework',
@@ -124,19 +127,17 @@ INSTALLED_APPS = [
     'dj_rest_auth.registration',
     'drf_yasg',
 
-
-    # project main apps
-    'property',
-    'Reservation' , 
     'django_filters',
-    
-    'chat',
-
     'cloudinary',
     'cloudinary_storage',
-    
+    # project main apps
+    'property',
+    'Reservation' ,
+    'chat',
     'reviews_and_ratings',
 ]
+
+#--------------------------------------------------------------------------------------
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',  
@@ -148,9 +149,18 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'allauth.account.middleware.AccountMiddleware', 
-
 ]
 
+#--------------------------------------------------------------------------------------
+# Email Configuration to send massages from your acount to the useres :)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')  
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')  
+
+#--------------------------------------------------------------------------------------
 
 CORS_ALLOW_CREDENTIALS = True
 
@@ -183,7 +193,9 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOW_ALL_ORIGINS = True
 
 
 
@@ -192,7 +204,7 @@ ROOT_URLCONF = 'project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'templates'],  # Add your templates directory here
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
