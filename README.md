@@ -6,6 +6,31 @@
 [![Django REST Framework](https://img.shields.io/badge/Django%20REST%20Framework-3.14.0-blue.svg)]
 [![Channels](https://img.shields.io/badge/Django%20Channels-4.0.0-blue.svg)]
 
+## Team
+
+This project was developed by a group of 5 talented software engineers studying at ITI:
+
+1. **Ibrahim Saber**
+   - [GitHub](https://github.com/ibrahimsaber1)
+   - [LinkedIn](https://www.linkedin.com/in/ibrahim1saber/)
+   
+2. **Khaled Hamdy**
+   - GitHub: [https://github.com/khaledhamdy](https://github.com/KhalidHamdi) *(Replace with actual link if available)*
+   - LinkedIn: [https://www.linkedin.com/in/khaledhamdy/](https://www.linkedin.com/in/khalidhamdii/) *(Replace with actual link if available)*
+
+3. **Basmala Salem**
+   - GitHub: [https://github.com/basmalasalem](#) *(Replace with actual link if available)*
+   - LinkedIn: [https://www.linkedin.com/in/basmalasalem/](#) *(Replace with actual link if available)*
+
+4. **David Emad**
+   - GitHub: [https://github.com/davidemad](#) *(Replace with actual link if available)*
+   - LinkedIn: [https://www.linkedin.com/in/davidemad/](#) *(Replace with actual link if available)*
+
+5. **Michael Emad**
+   - GitHub: [https://github.com/michaelemad](#) *(Replace with actual link if available)*
+   - LinkedIn: [https://www.linkedin.com/in/michaelemad/](#) *(Replace with actual link if available)*
+---
+
 ## Table of Contents
 
 - [Project Description](#project-description)
@@ -138,6 +163,90 @@ Start the development server using:
    ```bash
 python manage.py runserver
    ```
+The server will start at http://127.0.0.1:8000/
+
+## Running the Server
+
+Start the development server using:
+
+```bash
+python manage.py runserver
+The server will start at http://127.0.0.1:8000/
+   ```
+API Documentation
+API documentation is available via Swagger UI and ReDoc:
+
+Swagger UI:
+```bash
+http://127.0.0.1:8000/swagger/
+  ```
+ReDoc:
+```bash
+http://127.0.0.1:8000/redoc/
+  ```
+These interfaces provide interactive documentation where you can explore and test API endpoints.
+
+Testing
+Run the test suite using:
+
+```bash
+python manage.py test
+Ensure all tests pass to verify the integrity of the application.
+```
+## Deployment
+
+For deploying the application to production, consider the following steps:
+
+### Configure Production Settings
+
+- **Set `DEBUG=False` in your `.env` file.**
+- **Define `ALLOWED_HOSTS` with your domain names.**
+- **Use a secure `SECRET_KEY`.**
+
+### Set Up a Production Server
+
+Use services like **Heroku**, **AWS**, **DigitalOcean**, or others.
+
+### Configure Web Server
+
+- **Use Gunicorn** as the WSGI HTTP server.
+- **Use Nginx** as a reverse proxy.
+
+### Set Up HTTPS
+
+Ensure secure communication by setting up SSL certificates.
+
+### Scale as Needed
+
+Monitor and scale resources based on the application's usage.
+
+### Static and Media Files
+
+- **Serve static files** using WhiteNoise or via a CDN.
+- **Ensure media files** are served securely, preferably via Cloudinary.
+
+## Contributing
+
+Contributions are welcome! Follow these steps to contribute:
+
+### Fork the Repository
+
+### Create a Feature Branch
+
+```bash
+git checkout -b feature/YourFeatureName
+```
+## Commit Your Changes
+```bash
+git commit -m "Add some feature"
+```
+
+### Push to the Branch
+```bash
+git push origin feature/YourFeatureName
+```
+Open a Pull Request
+Describe your changes and submit the PR for review.
 
 
 
