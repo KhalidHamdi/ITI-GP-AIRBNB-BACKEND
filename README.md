@@ -6,6 +6,15 @@
 [![Django REST Framework](https://img.shields.io/badge/Django%20REST%20Framework-3.14.0-blue.svg)]
 [![Channels](https://img.shields.io/badge/Django%20Channels-4.0.0-blue.svg)]
 
+## Repository Stats
+
+![GitHub forks](https://img.shields.io/github/forks/ahmedabougabal/mernStackMilestoneProject_ITI?style=social)
+![GitHub issues](https://img.shields.io/github/issues/ahmedabougabal/mernStackMilestoneProject_ITI)
+![GitHub pull requests](https://img.shields.io/github/issues-pr/ahmedabougabal/mernStackMilestoneProject_ITI)
+![GitHub contributors](https://img.shields.io/github/contributors/ahmedabougabal/mernStackMilestoneProject_ITI)
+![GitHub last commit](https://img.shields.io/github/last-commit/ahmedabougabal/mernStackMilestoneProject_ITI)
+![RepoViews](https://komarev.com/ghpvc/?username=ahmedabougabal&color=blue)
+
 ## Team
 
 This project was developed by a group of 5 talented software engineers studying at ITI:
