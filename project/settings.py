@@ -45,14 +45,15 @@ ALLOWED_HOSTS = ['*']
 
 WEBSITE_URL='http://localhost:5173'
 
-CHANNEL_LAYERS={
+CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
         'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
+            "hosts": [(config('REDIS_URL'))],
         },
     },
 }
+
 
 DJANGO_REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
@@ -184,6 +185,7 @@ EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 #--------------------------------------------------------------------------------------
 
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000', 
@@ -261,7 +263,6 @@ DATABASES = {
         'PORT': config('DB_PORT'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
