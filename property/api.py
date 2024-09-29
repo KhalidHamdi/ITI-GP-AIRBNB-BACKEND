@@ -8,20 +8,21 @@ from django.shortcuts import get_object_or_404
 from .filter import PropertyFilter ;
 from rest_framework.permissions import IsAuthenticated
 
-
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_list(request):
-        properties = Property.objects.all()
+    print("Request Parameters: ", request.GET)
 
-        landlord_username = request.GET.get('landlord_username', '')
-        if landlord_username:
-            properties = properties.filter(landlord__username=landlord_username)  # Correct query
-        
-        serializer = PropertiesListSerializer(properties, many=True)
-        return JsonResponse({
-            'data': serializer.data
-        })
+    filterset = PropertyFilter(request.GET, queryset=Property.objects.all())
+
+    if not filterset.is_valid():
+        print("Filter Errors: ", filterset.errors)
+
+    serializer = PropertiesListSerializer(filterset.qs, many=True)
+
+    return JsonResponse({
+        'data': serializer.data
+    })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])  # Ensure only authenticated users can access this endpoint
