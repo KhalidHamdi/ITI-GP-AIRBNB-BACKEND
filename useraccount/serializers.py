@@ -3,15 +3,19 @@ from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 
 
+
 User = get_user_model()
 
 class UserDetailSerializer(serializers.ModelSerializer):
     password1 = serializers.CharField(write_only=True, style={'input_type': 'password'})
     password2 = serializers.CharField(write_only=True, style={'input_type': 'password'})
+    avatar = serializers.SerializerMethodField()
+
 
     class Meta:
         model = User
-        fields = ['username', 'email', 'password1', 'password2', 'id']
+
+        fields = ['username', 'email', 'password1', 'password2', 'id' , 'avatar']
         extra_kwargs = {
             'username': {'required': True, 'min_length': 1, 'max_length': 20},
             'email': {'required': True},
@@ -45,3 +49,20 @@ class UserDetailSerializer(serializers.ModelSerializer):
             password=password
         )
         return user
+    
+    def get_avatar(self, obj):
+        return obj.avatar.url if obj.avatar else None
+
+class UserUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'avatar']  
+
+    def update(self, instance, validated_data):
+        instance.username = validated_data.get('username', instance.username)
+        instance.email = validated_data.get('email', instance.email)
+        avatar = validated_data.get('avatar', None)
+        if avatar:
+            instance.avatar = avatar
+        instance.save()
+        return instance
