@@ -12,16 +12,19 @@ from rest_framework.permissions import IsAuthenticated
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_list(request):
-        properties = Property.objects.all()
+    print("Request Parameters: ", request.GET)
+    
+    filterset = PropertyFilter(request.GET, queryset=Property.objects.all())
+    
+    if not filterset.is_valid():
+        print("Filter Errors: ", filterset.errors)
 
-        landlord_id = request.GET.get('landlord_id', '')
-        if landlord_id:
-            properties = properties.filter(landlord_id=landlord_id)
+    serializer = PropertiesListSerializer(filterset.qs, many=True)
+    
+    return JsonResponse({
+        'data': serializer.data
+    })
 
-        serializer = PropertiesListSerializer(properties, many=True)
-        return JsonResponse({
-            'data': serializer.data
-        })
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])  # Ensure only authenticated users can access this endpoint
