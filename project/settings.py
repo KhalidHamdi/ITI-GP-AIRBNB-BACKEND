@@ -135,6 +135,8 @@ INSTALLED_APPS = [
     'Reservation' ,
     'chat',
     'reviews_and_ratings',
+    
+    'favorite'
 ]
 
 #--------------------------------------------------------------------------------------
