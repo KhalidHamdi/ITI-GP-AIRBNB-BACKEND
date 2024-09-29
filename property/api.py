@@ -8,6 +8,9 @@ from django.shortcuts import get_object_or_404
 from .filter import PropertyFilter ;
 from rest_framework.permissions import IsAuthenticated
 
+from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def properties_list(request):
@@ -16,13 +19,15 @@ def properties_list(request):
     filterset = PropertyFilter(request.GET, queryset=Property.objects.all())
 
     if not filterset.is_valid():
-        print("Filter Errors: ", filterset.errors)
+        return Response({"error": "Invalid filters"}, status=400)
 
-    serializer = PropertiesListSerializer(filterset.qs, many=True)
+    paginator = PageNumberPagination()
+    paginator.page_size = 12  # Properties per page
+    paginated_qs = paginator.paginate_queryset(filterset.qs, request)
 
-    return JsonResponse({
-        'data': serializer.data
-    })
+    serializer = PropertiesListSerializer(paginated_qs, many=True)
+    
+    return paginator.get_paginated_response(serializer.data)
 
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])  # Ensure only authenticated users can access this endpoint
