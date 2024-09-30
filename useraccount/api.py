@@ -56,8 +56,8 @@ class RegisterView(APIView):
 @api_view(['GET'])
 @authentication_classes([])
 @permission_classes([])
-def landlord_detail(request, username):
-    user = User.objects.get(username=username)
+def landlord_detail(request, pk):
+    user = User.objects.get(pk=pk)
     print("User", user)
 
     serializer = UserDetailSerializer(user, many=False)
