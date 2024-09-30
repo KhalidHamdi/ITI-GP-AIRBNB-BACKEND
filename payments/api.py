@@ -57,19 +57,24 @@ def initiate_payment(request, reservation_id):
         return Response({'success': False, 'error': str(e)}, status=500)
 
 @api_view(['POST'])
-# @permission_classes([AllowAny])
 def payment_status_webhook(request):
     try:
         paymob_order_id = request.data.get('order_id')
-        payment_status = request.data.get('success') 
+        payment_status = request.data.get('success')  # true/false from Paymob response
 
         reservation = Reservation.objects.get(paymob_order_id=paymob_order_id)
 
-        reservation.is_paid = payment_status
-        reservation.payment_status = 'Paid' if payment_status else 'Failed'
-        reservation.save()
+        if payment_status:  # If payment succeeded
+            reservation.is_paid = True
+            reservation.payment_status = 'Paid'
+            reservation.save()
+            return Response({'success': True, 'redirect_url': '/'})  # Redirect to home page
 
-        return Response({'success': True})
+        else:  # If payment failed
+            reservation.is_paid = False
+            reservation.payment_status = 'Failed'
+            reservation.save()
+            return Response({'success': False, 'message': 'Payment failed.'}, status=400)
 
     except Reservation.DoesNotExist:
         return Response({'success': False, 'error': 'Reservation not found.'}, status=404)
