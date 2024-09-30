@@ -4,7 +4,6 @@ from rest_framework.decorators import api_view, authentication_classes, permissi
 from rest_framework.permissions import IsAuthenticated, AllowAny
 
 from .models import User
-from .serializers import UserDetailSerializer
 
 from property.serializers import PropertiesListSerializer
 from Reservation.serializers import ReservationsListSerializer
@@ -14,20 +13,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import UserDetailSerializer
 
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from .serializers import UserDetailSerializer
-
-
 from dj_rest_auth.views import LoginView
-from rest_framework.response import Response
-
-
-
-from rest_framework.response import Response
-from dj_rest_auth.views import LoginView
-from .serializers import UserDetailSerializer
 from .serializers import UserUpdateSerializer
 
 class CustomLoginView(LoginView):
