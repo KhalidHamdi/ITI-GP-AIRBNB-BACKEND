@@ -10,7 +10,7 @@ from useraccount.models import User
 from rest_framework.permissions import AllowAny 
 
 @api_view(['GET'])
-@permission_classes([AllowAny])
+# @permission_classes([AllowAny])
 def conversations_list(request):
     conversations = Conversation.objects.all()
     serializer = ConversationListSerializer(conversations, many=True) 
