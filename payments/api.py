@@ -1,8 +1,12 @@
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from django.views.decorators.csrf import csrf_exempt
 from .paymob import get_paymob_token, create_order, get_payment_key, card_payment
 from Reservation.models import Reservation
+from django.shortcuts import redirect
+from django.http import HttpResponseRedirect
 
 
 
@@ -56,22 +60,39 @@ def initiate_payment(request, reservation_id):
     except Exception as e:
         return Response({'success': False, 'error': str(e)}, status=500)
 
-@api_view(['POST'])
-# @permission_classes([AllowAny])
+@csrf_exempt
+@api_view(['POST', 'GET'])
+@permission_classes([AllowAny])
 def payment_status_webhook(request):
-    try:
-        paymob_order_id = request.data.get('order_id')
-        payment_status = request.data.get('success') 
+    print("Hellllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllo")
+    # data = request.GET.dict()
+     # Process the transaction data
+    payment_status_str = request.GET.get('success')
+    transaction_id = request.GET.get('id')
+    paymob_order_id  = request.GET.get('order')
+    payment_status = True if payment_status_str == 'true' else False
+    
+    reservation = Reservation.objects.get(paymob_order_id=paymob_order_id)
 
-        reservation = Reservation.objects.get(paymob_order_id=paymob_order_id)
+        # Update reservation based on payment status
+    reservation.is_paid = payment_status
+    reservation.payment_status = 'Paid' if payment_status else 'Failed'
+    reservation.save()
+    
+    if payment_status:
+      
+        print(f"Transaction {transaction_id} for Order {paymob_order_id} successfully processed.")
 
-        reservation.is_paid = payment_status
-        reservation.payment_status = 'Paid' if payment_status else 'Failed'
-        reservation.save()
+    return Response({
+            'success': True,
+            'redirect_url': 'http://localhost:5173/'
+        })  
 
-        return Response({'success': True})
-
-    except Reservation.DoesNotExist:
-        return Response({'success': False, 'error': 'Reservation not found.'}, status=404)
-    except Exception as e:
-        return Response({'success': False, 'error': str(e)}, status=500)
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def payment_redirect(request):
+    success = request.query_params.get('success')
+    
+    if success == 'true':
+        return HttpResponseRedirect("http://localhost:5173/")
+    return Response({"received_param": success})

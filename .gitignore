@@ -3,6 +3,7 @@ venv/
 ENV/
 .venv/
 myenv
+test
 
 # Python/Django
 *.pyc
