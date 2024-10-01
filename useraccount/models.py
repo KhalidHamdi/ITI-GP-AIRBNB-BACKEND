@@ -1,9 +1,10 @@
+# src/models.py
+
 from django.db import models
 import uuid
 from django.conf import settings
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin, UserManager, Group, Permission
 from cloudinary.models import CloudinaryField
-
 
 class CustomUserManager(UserManager):
     def _create_user(self, username, email, password, **extra_fields):
@@ -33,6 +34,11 @@ class User(AbstractBaseUser, PermissionsMixin):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     email = models.EmailField(unique=True)
     username = models.CharField(max_length=20, unique=True )
+    first_name = models.CharField(max_length=30, blank=True, null=True)
+    last_name = models.CharField(max_length=30, blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    address = models.CharField(max_length=255, blank=True, null=True)
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
     avatar = CloudinaryField('image', blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_superuser = models.BooleanField(default=False)
@@ -71,4 +77,3 @@ class User(AbstractBaseUser, PermissionsMixin):
         
     def __str__(self):
         return self.username if self.username else self.email
-

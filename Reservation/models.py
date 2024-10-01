@@ -36,3 +36,13 @@ class Reservation(models.Model):
      
     def __str__(self):
         return f"Reservation for {self.property.title}"
+    
+    def cancel_reservation(self):
+        """Cancels the reservation if it is valid to do so (before 7 days)."""
+        current_date = timezone.now().date()
+        days_until_start = (self.start_date - current_date).days
+
+        if days_until_start < 7:
+            raise ValidationError("You can only cancel the reservation up to 7 days before the start date.")
+        
+        self.delete()  
