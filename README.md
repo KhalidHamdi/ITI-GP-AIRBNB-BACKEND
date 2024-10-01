@@ -33,8 +33,8 @@ This project was developed by a group of 5 talented software engineers studying 
    - GitHub: [https://github.com/basmalasalem](#) 
    - LinkedIn: [https://www.linkedin.com/in/basmalasalem/](#) 
 5. **Michael Emad**
-   - GitHub: [https://github.com/michaelemad](#) 
-   - LinkedIn: [https://www.linkedin.com/in/michaelemad/](#) 
+   - [GitHub](https://github.com/Michael-Emad-Ramzy)
+   - [LinkedIn](https://www.linkedin.com/in/michael-emad-7a9a25277/)
 ---
 
 ## Table of Contents
