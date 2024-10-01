@@ -31,8 +31,8 @@ This project was developed by a group of 5 talented software engineers studying 
    - LinkedIn: [https://www.linkedin.com/in/basmalasalem/](#) 
 
 5. **David Emad**
-   - GitHub: [https://github.com/davidemad](#) 
-   - LinkedIn: [https://www.linkedin.com/in/davidemad/](#) 
+   - [GitHub](https://github.com/davidemad10)
+   - [LinkedIn](https://www.linkedin.com/in/davidemad10/)
 
 6. **Michael Emad**
    - GitHub: [https://github.com/michaelemad](#) 
