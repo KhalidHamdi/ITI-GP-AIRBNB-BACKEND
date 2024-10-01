@@ -13,7 +13,7 @@ urlpatterns = [
     # URL Pattern for Geocode Endpoint :) 
     path('geocode/', GeocodeView.as_view(), name='geocode'),
     path('<uuid:pk>/update/', UpdatePropertyView.as_view(), name='api_update_property'),  # for the updating
-    path('properties/<uuid:id>/delete/', PropertyDeleteView.as_view(), name='property-delete'),
+    path('<uuid:id>/delete/', PropertyDeleteView.as_view(), name='property-delete'),
 
 
 
