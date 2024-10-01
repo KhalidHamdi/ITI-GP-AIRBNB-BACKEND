@@ -40,7 +40,7 @@ def book_property(request, pk):
 
         property = Property.objects.get(pk=pk)
 
-        Reservation.objects.create(
+        reservation = Reservation.objects.create(
             property=property,
             start_date=start_date,
             end_date=end_date,
@@ -50,7 +50,9 @@ def book_property(request, pk):
             created_by=request.user
             # created_by=None,           
         )
-        return JsonResponse({'success': True})
+        reservation_serializer = ReservationsListSerializer(reservation)
+
+        return JsonResponse({'success': True, 'reservation': reservation_serializer.data})
     except Exception as e:
         print('Error from server: ', e)
         return JsonResponse({'success': False})

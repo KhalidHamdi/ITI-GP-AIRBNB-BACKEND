@@ -22,15 +22,15 @@ class Reservation(models.Model):
     id=models.CharField(primary_key=True,default=uuid.uuid4, editable=False, max_length=36)
     
     
-    # first_name = models.CharField(max_length=100, blank=True, null=True)
-    # last_name = models.CharField(max_length=100, blank=True, null=True)
-    # email = models.EmailField(blank=True, null=True)
-    # phone = models.CharField(max_length=15, blank=True, null=True)
+    first_name = models.CharField(max_length=100, blank=True, null=True)
+    last_name = models.CharField(max_length=100, blank=True, null=True)
+    email = models.EmailField(blank=True, null=True)
+    phone = models.CharField(max_length=15, blank=True, null=True)
     
     
-    # paymob_order_id = models.CharField(max_length=100, blank=True, null=True)
-    # is_paid = models.BooleanField(default=False)
-    # payment_status = models.CharField(max_length=50, blank=True, null=True)
+    paymob_order_id = models.CharField(max_length=100, blank=True, null=True)
+    is_paid = models.BooleanField(default=False)
+    payment_status = models.CharField(max_length=50, blank=True, null=True)
     
     
      
