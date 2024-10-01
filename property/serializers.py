@@ -3,7 +3,9 @@ from rest_framework import serializers
 from django.db.models import Avg
 from useraccount.serializers import UserDetailSerializer
 from favorite.models import Favorite
+from Reservation.models import Reservation  # Import Reservation model
 
+from .models import Property
 
 class PropertiesListSerializer(serializers.ModelSerializer):
     image_url = serializers.SerializerMethodField()
@@ -115,3 +117,16 @@ class PropertyUpdateSerializer(serializers.ModelSerializer):
             'city',
             'address',
         )
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Reservation
+        fields = '__all__'
+
+class PropertySerializer(serializers.ModelSerializer):
+    bookings = BookingSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Property
+        fields = '__all__'

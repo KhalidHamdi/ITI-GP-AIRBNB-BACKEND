@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import GeocodeView, UpdatePropertyView
+from .views import PropertyDeleteView, UpdatePropertyView , GeocodeView
 
 from . import api
 
@@ -12,7 +12,9 @@ urlpatterns = [
     path('search_suggestions/',api.search_suggestions, name='search_suggestions'),    
     # URL Pattern for Geocode Endpoint :) 
     path('geocode/', GeocodeView.as_view(), name='geocode'),
-    path('<uuid:pk>/update/', UpdatePropertyView.as_view(), name='api_update_property'),  # New URL
+    path('<uuid:pk>/update/', UpdatePropertyView.as_view(), name='api_update_property'),  # for the updating
+    path('properties/<uuid:id>/delete/', PropertyDeleteView.as_view(), name='property-delete'),
+
 
 
 
