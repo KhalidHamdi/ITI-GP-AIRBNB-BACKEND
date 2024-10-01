@@ -26,15 +26,13 @@ This project was developed by a group of 5 talented software engineers studying 
 2. **Khaled Hamdy**
    - [GitHub](https://github.com/KhalidHamdi)
    - [LinkedIn](https://www.linkedin.com/in/khalidhamdii/)
+3. **David Emad**
+   - [GitHub](https://github.com/davidemad10)
+   - [LinkedIn](https://www.linkedin.com/in/davidemad10/)
 4. **Basmala Salem**
    - GitHub: [https://github.com/basmalasalem](#) 
    - LinkedIn: [https://www.linkedin.com/in/basmalasalem/](#) 
-
-5. **David Emad**
-   - [GitHub](https://github.com/davidemad10)
-   - [LinkedIn](https://www.linkedin.com/in/davidemad10/)
-
-6. **Michael Emad**
+5. **Michael Emad**
    - GitHub: [https://github.com/michaelemad](#) 
    - LinkedIn: [https://www.linkedin.com/in/michaelemad/](#) 
 ---
