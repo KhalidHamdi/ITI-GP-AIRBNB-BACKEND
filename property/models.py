@@ -24,6 +24,7 @@ class Property(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     landlord = models.ForeignKey(User, on_delete=models.CASCADE, null=False,)
+    is_advertised = models.BooleanField(default=False , null=True)
 
 
     def image_url(self):
