@@ -6,6 +6,21 @@ from rest_framework import status
 from django.conf import settings
 from rest_framework.permissions import AllowAny
 
+from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
+from .serializers import PropertyUpdateSerializer
+from .models import Property
+from django.shortcuts import get_object_or_404
+
+class UpdatePropertyView(generics.UpdateAPIView):
+    queryset = Property.objects.all()
+    serializer_class = PropertyUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        obj = get_object_or_404(Property, pk=self.kwargs['pk'], landlord=self.request.user)
+        return obj
+
 class GeocodeView(APIView):
     permission_classes = [AllowAny]
 

@@ -95,3 +95,23 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
         request = self.context.get('request')
         validated_data['landlord'] = request.user 
         return super().create(validated_data)
+    
+    
+
+class PropertyUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Property
+        fields = (
+            'title',
+            'description',
+            'price_per_night',
+            'bedrooms',
+            'bathrooms',
+            'guests',
+            'country',
+            'country_code',
+            'category',
+            'image',
+            'city',
+            'address',
+        )
