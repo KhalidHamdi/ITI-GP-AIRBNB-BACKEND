@@ -67,8 +67,8 @@ def landlord_detail(request, pk):
 
 @api_view(['GET'])
 def reservations_list(request):
-    reservations = request.user.reservations.all()
-
+    # reservations = request.user.reservations.all()
+    reservations = request.user.reservations.filter(is_paid=True)
     print('user', request.user)
     print(reservations)
     
