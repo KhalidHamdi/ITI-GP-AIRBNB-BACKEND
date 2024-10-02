@@ -64,7 +64,7 @@ def initiate_payment(request, reservation_id):
 @api_view(['POST', 'GET'])
 @permission_classes([AllowAny])
 def payment_status_webhook(request):
-    print("Hellllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllllo")
+    print("Hellooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooooo")
     # data = request.GET.dict()
      # Process the transaction data
     payment_status_str = request.GET.get('success')
@@ -92,6 +92,20 @@ def payment_status_webhook(request):
 @permission_classes([AllowAny])
 def payment_redirect(request):
     success = request.query_params.get('success')
+    payment_status_str = request.GET.get('success')
+    print ("Payment status ...........................", payment_status_str)
+    transaction_id = request.GET.get('id')
+    print ("Payment id ...........................", transaction_id)
+    paymob_order_id  = request.GET.get('order')
+    print ("Payment order id ...........................", paymob_order_id)
+    payment_status = True if payment_status_str == 'true' else False
+    
+    reservation = Reservation.objects.get(paymob_order_id=paymob_order_id)
+
+        # Update reservation based on payment status
+    reservation.is_paid = payment_status
+    reservation.payment_status = 'Paid' if payment_status else 'Failed'
+    reservation.save()
     
     if success == 'true':
         return HttpResponseRedirect("http://localhost:5173/?message=Payment successful")
