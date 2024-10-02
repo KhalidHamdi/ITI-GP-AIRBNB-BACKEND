@@ -94,5 +94,6 @@ def payment_redirect(request):
     success = request.query_params.get('success')
     
     if success == 'true':
-        return HttpResponseRedirect("http://localhost:5173/")
-    return Response({"received_param": success})
+        return HttpResponseRedirect("http://localhost:5173/?message=Payment successful")
+    else:
+        return HttpResponseRedirect("http://localhost:5173/?message=Payment failed")
