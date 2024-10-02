@@ -24,14 +24,6 @@ def properties_list(request):
         properties = properties.filter(landlord_id=landlord_id)
 
     filterset = PropertyFilter(request.GET, queryset=properties)
-    # Filter properties based on landlord_id query parameter if provided in the request URL.
-    properties = Property.objects.all()
-    landlord_id = request.GET.get('landlord_id', '')
-    
-    if landlord_id:
-        properties = properties.filter(landlord_id=landlord_id)
-
-    filterset = PropertyFilter(request.GET, queryset=properties)
 
     if not filterset.is_valid() :
         return Response({"error": "Invalid filters"}, status=400)

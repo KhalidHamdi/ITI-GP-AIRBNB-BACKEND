@@ -20,7 +20,8 @@ class PropertiesListSerializer(serializers.ModelSerializer):
             'image_url',
             'average_rating',
             'reviews_count',
-            'is_favorited'
+            'is_favorited',
+            'landlord',
             
         )
 
