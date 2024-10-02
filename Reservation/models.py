@@ -35,7 +35,7 @@ class Reservation(models.Model):
     
      
     def __str__(self):
-        return f"Reservation for {self.property.title}"
+        return f"Reservation for {self.property.title} by {self.created_by}"
     
     def cancel_reservation(self):
         """Cancels the reservation if it is valid to do so (before 7 days)."""
