@@ -6,6 +6,21 @@ from rest_framework import status
 from django.conf import settings
 from rest_framework.permissions import AllowAny
 
+from rest_framework import generics, permissions
+from rest_framework.permissions import IsAuthenticated
+from .serializers import PropertyUpdateSerializer ,PropertySerializer
+from .models import Property
+from django.shortcuts import get_object_or_404
+
+class UpdatePropertyView(generics.UpdateAPIView):
+    queryset = Property.objects.all()
+    serializer_class = PropertyUpdateSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_object(self):
+        obj = get_object_or_404(Property, pk=self.kwargs['pk'], landlord=self.request.user)
+        return obj
+
 class GeocodeView(APIView):
     permission_classes = [AllowAny]
 
@@ -24,3 +39,14 @@ class GeocodeView(APIView):
             return Response(response.json(), status=status.HTTP_200_OK)
         except requests.exceptions.RequestException as e:
             return Response({"error": str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+class PropertyDeleteView(generics.DestroyAPIView):
+    queryset = Property.objects.all()
+    serializer_class = PropertySerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_object(self):
+        # Ensure that only the landlord who owns the property can delete it
+        obj = get_object_or_404(Property, id=self.kwargs['id'], landlord=self.request.user)
+        return obj
