@@ -60,7 +60,7 @@ class ChatConsumer(AsyncWebsocketConsumer):
                         'name': name
                     }
                 )
-                            # Prepare notification message
+                # Prepare notification message
                 notification_message = {
                     'type': 'user_notification',
                     'body': body,
@@ -71,7 +71,6 @@ class ChatConsumer(AsyncWebsocketConsumer):
                     self.room_group_name,  # Send to the same group
                     notification_message
                 )
-
         except json.JSONDecodeError as e:
             print(f"Error decoding JSON: {e}, Text data: {text_data}")
         except Exception as e:
@@ -108,15 +107,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
             sent_to_id=sent_to_id,
             created_by=user if user.is_authenticated else None  
         )
-
-
-
-
-
-
-
-
-
-
-
-
