@@ -16,22 +16,31 @@ from rest_framework.response import Response
 def properties_list(request):
     print("Request Parameters: ", request.GET)
 
-    # Filter properties based on landlord_id query parameter if provided in the request URL.
     properties = Property.objects.all()
     landlord_id = request.GET.get('landlord_id', '')
+    category = request.GET.get('category', '')
     
+    # Filter by landlord if provided
     if landlord_id:
         properties = properties.filter(landlord_id=landlord_id)
-
+    
+    # Filter by category if provided
+    if category:
+        properties = properties.filter(category__id=category)
+    
+    # Order by advertised first
+    properties = properties.order_by('-is_advertised', 'id')
+    
+    # Apply any additional filters using the PropertyFilter class (if required)
     filterset = PropertyFilter(request.GET, queryset=properties)
-
-    if not filterset.is_valid() :
+    
+    if not filterset.is_valid():
         return Response({"error": "Invalid filters"}, status=400)
-
+    
     paginator = PageNumberPagination()
-    paginator.page_size = 12  # Properties per page
+    paginator.page_size = 12  
     paginated_qs = paginator.paginate_queryset(filterset.qs, request)
-
+    
     serializer = PropertiesListSerializer(paginated_qs, many=True)
     
     return paginator.get_paginated_response(serializer.data)
