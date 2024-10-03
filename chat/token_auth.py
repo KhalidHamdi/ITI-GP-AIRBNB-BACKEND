@@ -36,16 +36,31 @@ class TokenAuthMiddleware(BaseMiddleware):
         super().__init__(inner)
 
     async def __call__(self, scope, receive, send):
-        # Get cookies from the scope
-        cookies = scope.get('headers', [])
-        cookie_dict = {key.decode('utf-8'): value.decode('utf-8') for key, value in cookies if key == b'cookie'}
-        
-        # Extract sessionid or authtoken from cookies
-        cookie_string = cookie_dict.get('cookie', '')
-        cookies = {item.split('=')[0]: item.split('=')[1] for item in cookie_string.split('; ')}
+        # Log headers to verify what cookies are being sent in production
+        for header in scope.get('headers', []):
+            logger.info(f"Header: {header}")
 
+        # Get cookies from the headers
+        cookies_header = dict(scope.get('headers', []))
+        cookie_string = cookies_header.get(b'cookie', b'').decode('utf-8')
+
+        # Log the raw cookie string
+        logger.info(f"Raw cookie string: {cookie_string}")
+
+        # Parse cookies
+        try:
+            cookies = {item.split('=')[0].strip(): item.split('=')[1].strip() for item in cookie_string.split(';') if '=' in item}
+            logger.info(f"Parsed cookies: {cookies}")
+        except Exception as e:
+            logger.error(f"Error parsing cookies: {str(e)}")
+            cookies = {}
+
+        # Extract sessionid or authtoken from cookies
         session_key = cookies.get('sessionid', None)
         token_key = cookies.get('authtoken', None)
+
+        # Log the session and token keys
+        logger.info(f"Session key: {session_key}, Token key: {token_key}")
 
         # Check for sessionid or token and assign user
         if session_key:
