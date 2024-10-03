@@ -41,7 +41,7 @@ DEBUG = True
 # ALLOWED_HOSTS = ['.vercel.app']
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 ALLOWED_HOSTS = ['*']
-
+CSRF_TRUSTED_ORIGINS=['https://itnb.up.railway.app']
 
 WEBSITE_URL='http://localhost:5173'
 
@@ -193,6 +193,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000', 
     'http://127.0.0.1:3000', 
     'http://localhost:5173',
+    'https://itnb.up.railway.app',
 ]
 
 
