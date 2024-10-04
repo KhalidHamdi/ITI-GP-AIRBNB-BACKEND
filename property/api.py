@@ -19,15 +19,15 @@ import os
 
 
 
-opena_api_key = os.getenv('opena_api_key')
-embeddings = OpenAIEmbeddings(
-    openai_api_key=opena_api_key, model="text-embedding-3-small")
+# opena_api_key = os.getenv('opena_api_key')
+# embeddings = OpenAIEmbeddings(
+#     openai_api_key=opena_api_key, model="text-embedding-3-small")
 
-vector_db = Chroma(
-    collection_name="airbnb",
-    embedding_function=embeddings,
-    persist_directory="./chroma",
-)
+# vector_db = Chroma(
+#     collection_name="airbnb",
+#     embedding_function=embeddings,
+#     persist_directory="./chroma",
+# )
 
 
 @api_view(['GET'])

@@ -12,24 +12,24 @@ from langchain_core.documents import Document
 import os
 
 
-opena_api_key = os.getenv('opena_api_key')
-embeddings = OpenAIEmbeddings(
-    openai_api_key=opena_api_key, model="text-embedding-3-small")
+# opena_api_key = os.getenv('opena_api_key')
+# embeddings = OpenAIEmbeddings(
+#     openai_api_key=opena_api_key, model="text-embedding-3-small")
 
-vector_db = Chroma(
-    collection_name="airbnb",
-    embedding_function=embeddings,
-    persist_directory="./chroma",
-)
+# vector_db = Chroma(
+#     collection_name="airbnb",
+#     embedding_function=embeddings,
+#     persist_directory="./chroma",
+# )
 
-def add_data(vector_db, meta_data, id):
-    doc = Document(
-        page_content=meta_data,
-        metadata={"id": str(id)}  
-    )
-    vector_db.add_documents(
-        documents=[doc]
-    )
+# def add_data(vector_db, meta_data, id):
+#     doc = Document(
+#         page_content=meta_data,
+#         metadata={"id": str(id)}  
+#     )
+#     vector_db.add_documents(
+#         documents=[doc]
+#     )
 
 
 
@@ -78,7 +78,7 @@ class Property(models.Model):
         f"Enjoy your stay at just ${self.price_per_night} per night."
         )
         super().save(*args, **kwargs)
-        add_data(vector_db, self.meta, self.id)
+        # add_data(vector_db, self.meta, self.id)
 
 
 
