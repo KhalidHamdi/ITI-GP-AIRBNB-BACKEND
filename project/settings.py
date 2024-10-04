@@ -19,6 +19,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from decouple import config
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 DEBUG = True
@@ -41,7 +44,7 @@ DEBUG = True
 # ALLOWED_HOSTS = ['.vercel.app']
 # ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 ALLOWED_HOSTS = ['*']
-
+CSRF_TRUSTED_ORIGINS=['https://itnb.up.railway.app']
 
 WEBSITE_URL='http://localhost:5173'
 
@@ -193,6 +196,7 @@ CORS_ALLOWED_ORIGINS = [
     'http://127.0.0.1:8000', 
     'http://127.0.0.1:3000', 
     'http://localhost:5173',
+    'https://itnb.up.railway.app',
 ]
 
 
@@ -222,6 +226,8 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOW_ALL_ORIGINS = True
 
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 
 ROOT_URLCONF = 'project.urls'

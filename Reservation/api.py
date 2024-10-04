@@ -15,7 +15,8 @@ def property_reservations(request, pk):
     try:
         property = get_object_or_404(Property, pk=pk)
         
-        reservations = property.reservations.all()
+        # reservations = property.reservations.all()
+        reservations = property.reservations.filter(is_paid=True)
 
         serializer = ReservationsListSerializer(reservations, many=True)
 
