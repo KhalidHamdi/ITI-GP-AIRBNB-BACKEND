@@ -1,4 +1,3 @@
-
 from django.db import models
 import uuid
 from django.conf import settings
@@ -22,10 +21,10 @@ vector_db = Chroma(
     persist_directory="./chroma",
 )
 
-def add_data(vector_db, meta_data, id):
+def add_data(vector_db, meta_data, id, city):
     doc = Document(
         page_content=meta_data,
-        metadata={"id": str(id)}  
+        metadata={"id": str(id), "city": city} 
     )
     vector_db.add_documents(
         documents=[doc]
@@ -72,13 +71,20 @@ class Property(models.Model):
     
     def save(self, *args, **kwargs):
         self.meta = (
-        f"{self.title} - A stunning property located in {self.city}, {self.country}. "
-        f"This accommodation features {self.bedrooms} bedrooms and {self.bathrooms} bathrooms, "
-        f"making it perfect for up to {self.guests} guests. "
-        f"Enjoy your stay at just ${self.price_per_night} per night."
+            f"{self.title} - A stunning property located in {self.city}, {self.country}. "
+            f"This accommodation features {self.bedrooms} bedrooms and {self.bathrooms} bathrooms, "
+            f"making it perfect for up to {self.guests} guests. "
+            f"Enjoy your stay at just ${self.price_per_night} per night."
         )
+
+        if self.id:
+            deletion_result = vector_db.delete(ids=[str(self.id)])
+            print("Deletion Result:", deletion_result) 
+
+
         super().save(*args, **kwargs)
-        add_data(vector_db, self.meta, self.id)
+
+        add_data(vector_db, self.meta, self.id, self.city)
 
 
 
