@@ -107,31 +107,30 @@ def search_properties(request):
     serializer = PropertiesListSerializer(properties, many=True)
     return JsonResponse({'data': serializer.data})
 
-
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def recommendation_search_properties(request):
-    query = request.GET.get('query', '').lower()  
-    city = request.GET.get('city', '').lower()  
+    city = request.GET.get('city', '').strip().lower()  
+    user_query = request.GET.get('query', '').strip().lower()  
+    query = f"{city} {user_query}"
 
     search_results = vector_db.similarity_search(query, k=1)
+    print(search_results)
 
     property_ids = []
 
     for result in search_results:
         if 'id' in result.metadata:
+            
             property_ids.append(result.metadata['id'])
 
-    if not property_ids:
-        return JsonResponse({'data': []}, status=200)
-
     properties = Property.objects.filter(id__in=property_ids)
+    
     if city:
         properties = properties.filter(city__icontains=city)
 
     serializer = PropertiesListSerializer(properties, many=True)
     return JsonResponse({'data': serializer.data})
-
 
 
 @api_view(['GET'])
