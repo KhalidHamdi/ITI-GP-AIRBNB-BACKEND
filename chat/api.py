@@ -9,24 +9,40 @@ from .serializers import ConversationListSerializer, ConversationDetailSerialize
 from useraccount.models import User
 from rest_framework.permissions import AllowAny 
 
+from django.db.models import Prefetch
+from django.core.paginator import Paginator
+
 @api_view(['GET'])
-# @permission_classes([AllowAny])
 def conversations_list(request):
-    conversations = Conversation.objects.all()
+    conversations = Conversation.objects.prefetch_related(
+        'users',
+        Prefetch('messages', queryset=ConversationMessage.objects.select_related('created_by', 'sent_to'))
+    ).all()
     serializer = ConversationListSerializer(conversations, many=True) 
     return JsonResponse(serializer.data, safe=False)
 
 
 @api_view(['GET'])
 def conversations_detail(request, pk):
-    conversation = request.user.conversations.get(pk=pk)
-
+    conversation = request.user.conversations.prefetch_related(
+        'users',
+        Prefetch('messages', queryset=ConversationMessage.objects.select_related('created_by', 'sent_to'))
+    ).get(pk=pk)
+    messages = ConversationMessage.objects.filter(conversation=conversation).order_by('created_at')
+    # Set up pagination
+    paginator = Paginator(messages, 10) 
+    page_number = request.GET.get('page')  
+    page_obj = paginator.get_page(page_number)  
     conversation_serializer = ConversationDetailSerializer(conversation, many=False)
     messages_serializer = ConversationMessageSerializer(conversation.messages.all(), many=True)
 
     return JsonResponse({
         'conversation': conversation_serializer.data,
-        'messages': messages_serializer.data
+        'messages': messages_serializer.data,
+        'page': page_number,
+        'has_next': page_obj.has_next(),  
+        'has_previous': page_obj.has_previous(),
+        'total_pages': paginator.num_pages,  
     }, safe=False)
 
 
