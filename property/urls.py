@@ -14,6 +14,7 @@ urlpatterns = [
     path('geocode/', GeocodeView.as_view(), name='geocode'),
     path('<uuid:pk>/update/', UpdatePropertyView.as_view(), name='api_update_property'),  # for the updating
     path('<uuid:id>/delete/', PropertyDeleteView.as_view(), name='property-delete'),
+    path('search_recommendation/', api.recommendation_search_properties, name='recommendation_search_properties'),
 
 
 

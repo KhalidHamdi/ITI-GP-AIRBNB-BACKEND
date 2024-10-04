@@ -7,9 +7,28 @@ from .models import Property
 from django.shortcuts import get_object_or_404
 from .filter import PropertyFilter ;
 from rest_framework.permissions import IsAuthenticated
-
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
+
+
+from langchain_openai import OpenAIEmbeddings
+import chromadb
+from langchain_community.vectorstores.chroma import Chroma
+from langchain_core.documents import Document
+import os
+
+
+
+opena_api_key = os.getenv('opena_api_key')
+embeddings = OpenAIEmbeddings(
+    openai_api_key=opena_api_key, model="text-embedding-3-small")
+
+vector_db = Chroma(
+    collection_name="airbnb",
+    embedding_function=embeddings,
+    persist_directory="./chroma",
+)
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
@@ -48,7 +67,7 @@ def properties_list(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])  # Ensure only authenticated users can access this endpoint
+@permission_classes([IsAuthenticated])  
 def create_property(request):
     serializer = PropertyCreateSerializer(data=request.data, context={'request': request})
 
@@ -69,21 +88,51 @@ def properties_detail(request, pk):
 @api_view(['GET'])
 @permission_classes([AllowAny])
 def search_properties(request):
-    city=request.GET.get('city','')
-    country=request.GET.get('country','')
-    guests=request.GET.get('guests')
+    city = request.GET.get('city', '').strip()
+    country = request.GET.get('country', '').strip()
+    guests = request.GET.get('guests', None)
 
-    properties=Property.objects.all()
+    properties = Property.objects.all()
 
     if city:
-        properties=properties.filter(city__icontains=city)
-    if  country:
-        properties=properties.filter(country__icontains=country)
-    if  guests:
-        properties=properties.filter(guests__gte=guests)
-    
-    serializer=PropertiesListSerializer(properties,many=True)
-    return  JsonResponse({'data':serializer.data})
+        properties = properties.filter(city__icontains=city)
+
+    if country:
+        properties = properties.filter(country__icontains=country)
+
+    if guests and guests.isdigit():
+        properties = properties.filter(guests__gte=int(guests))
+
+
+    serializer = PropertiesListSerializer(properties, many=True)
+    return JsonResponse({'data': serializer.data})
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def recommendation_search_properties(request):
+    query = request.GET.get('query', '').lower()  
+    city = request.GET.get('city', '').lower()  
+
+    search_results = vector_db.similarity_search(query, k=1)
+
+    property_ids = []
+
+    for result in search_results:
+        if 'id' in result.metadata:
+            property_ids.append(result.metadata['id'])
+
+    if not property_ids:
+        return JsonResponse({'data': []}, status=200)
+
+    properties = Property.objects.filter(id__in=property_ids)
+    if city:
+        properties = properties.filter(city__icontains=city)
+
+    serializer = PropertiesListSerializer(properties, many=True)
+    return JsonResponse({'data': serializer.data})
+
+
 
 @api_view(['GET'])
 @permission_classes([AllowAny])

@@ -19,6 +19,9 @@ import cloudinary
 import cloudinary.uploader
 import cloudinary.api
 from decouple import config
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 DEBUG = True

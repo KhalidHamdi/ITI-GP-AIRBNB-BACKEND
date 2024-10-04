@@ -1,3 +1,5 @@
+.env
+
 # Virtual Environments
 venv/
 ENV/
@@ -25,3 +27,4 @@ temp/
 .vscode
 
 cloudinary_storage
+
