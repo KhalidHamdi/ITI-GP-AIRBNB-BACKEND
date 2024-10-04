@@ -67,14 +67,19 @@ def landlord_detail(request, pk):
 
 @api_view(['GET'])
 def reservations_list(request):
-    # reservations = request.user.reservations.all()
-    reservations = request.user.reservations.filter(is_paid=True)
-    print('user', request.user)
-    print(reservations)
-    
-    serializer = ReservationsListSerializer(reservations, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    # Fetching both paid and unpaid reservations
+    paid_reservations = request.user.reservations.filter(is_paid=True)
+    unpaid_reservations = request.user.reservations.filter(is_paid=False)
 
+    # Serializing both lists
+    paid_serializer = ReservationsListSerializer(paid_reservations, many=True)
+    unpaid_serializer = ReservationsListSerializer(unpaid_reservations, many=True)
+
+    # Return the serialized data as a JSON response
+    return JsonResponse({
+        'paid_reservations': paid_serializer.data,
+        'unpaid_reservations': unpaid_serializer.data,
+    }, safe=False)
 
 
 
