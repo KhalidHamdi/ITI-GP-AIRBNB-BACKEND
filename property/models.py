@@ -1,3 +1,4 @@
+
 from django.db import models
 import uuid
 from django.conf import settings
@@ -24,6 +25,9 @@ class Property(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     landlord = models.ForeignKey(User, on_delete=models.CASCADE, null=False,)
+    is_advertised = models.BooleanField(default=False)
+    paymob_order_id = models.CharField(max_length=255, blank=True, null=True) 
+    payment_status = models.CharField(max_length=20, blank=True, null=True)
 
 
     def image_url(self):
@@ -31,6 +35,9 @@ class Property(models.Model):
 
     def str(self):
         return (self.title)
+    
+    def __str__(self):
+        return f"Property {self.title} by {self.landlord}"
 
     # def save(self, args, **kwargs):
     #     if not self.latitude or not self.longitude:

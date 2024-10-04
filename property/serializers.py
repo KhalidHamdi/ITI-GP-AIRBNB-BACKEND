@@ -24,6 +24,7 @@ class PropertiesListSerializer(serializers.ModelSerializer):
             'reviews_count',
             'is_favorited',
             'landlord',
+            'is_advertised',
             
         )
 
