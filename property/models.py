@@ -1,11 +1,14 @@
+# property/models.py
 
 from django.db import models
 import uuid
 from django.conf import settings
 from cloudinary.models import CloudinaryField
-from opencage.geocoder import OpenCageGeocode
 from useraccount.models import User
+import logging
+from .vector_db import add_data  # Import add_data from vector_db.py
 
+logger = logging.getLogger(__name__)
 
 class Property(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
@@ -24,22 +27,34 @@ class Property(models.Model):
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
-    landlord = models.ForeignKey(User, on_delete=models.CASCADE, null=False,)
+    landlord = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
     is_advertised = models.BooleanField(default=False)
-    paymob_order_id = models.CharField(max_length=255, blank=True, null=True) 
+    paymob_order_id = models.CharField(max_length=255, blank=True, null=True)
     payment_status = models.CharField(max_length=20, blank=True, null=True)
-
+    meta = models.TextField(blank=True, null=True)
 
     def image_url(self):
-        return f'{settings.WEBSITE_URL}{self.image.url}'
+        # Assuming Cloudinary already gives you the full image URL
+        return self.image.url if self.image else None
 
-    def str(self):
-        return (self.title)
-    
     def __str__(self):
-        return f"Property {self.title} by {self.landlord}"
+        return f"{self.title} by {self.landlord.username}"
 
-    # def save(self, args, **kwargs):
+    def save(self, *args, **kwargs):
+        # Automatically generate meta description
+        self.meta = (
+            f"{self.title} - A stunning property located in {self.city}, {self.country}. "
+            f"This accommodation features {self.bedrooms} bedrooms and {self.bathrooms} bathrooms, "
+            f"making it perfect for up to {self.guests} guests. "
+            f"Enjoy your stay at just ${self.price_per_night} per night."
+        )
+        super().save(*args, **kwargs)
+        
+        # Try adding to vector database, log any errors without stopping save
+        add_data(self.meta, self.id)
+
+    # Geocoding logic (commented out but included for completeness)
+    # def save(self, *args, **kwargs):
     #     if not self.latitude or not self.longitude:
     #         geocoder = OpenCageGeocode(settings.OPENCAGE_API_KEY)
     #         query = f'{self.title}, {self.address}, {self.city}, {self.country}'
@@ -48,3 +63,11 @@ class Property(models.Model):
     #             self.latitude = results[0]['geometry']['lat']
     #             self.longitude = results[0]['geometry']['lng']
     #     super().save(args, **kwargs)
+
+class PropertyImage(models.Model):
+    property = models.ForeignKey(Property, on_delete=models.CASCADE, related_name='images')
+    image = CloudinaryField('image', blank=True, null=True)
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Image for {self.property.title}"

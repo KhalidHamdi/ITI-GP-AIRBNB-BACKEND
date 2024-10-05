@@ -8,7 +8,7 @@ from rest_framework.permissions import AllowAny
 
 from rest_framework import generics, permissions
 from rest_framework.permissions import IsAuthenticated
-from .serializers import PropertyUpdateSerializer ,PropertySerializer
+from .serializers import PropertyUpdateSerializer ,PropertySerializer , PropertyCreateSerializer
 from .models import Property
 from django.shortcuts import get_object_or_404
 
@@ -50,3 +50,10 @@ class PropertyDeleteView(generics.DestroyAPIView):
         # Ensure that only the landlord who owns the property can delete it
         obj = get_object_or_404(Property, id=self.kwargs['id'], landlord=self.request.user)
         return obj
+    
+class PropertyCreateView(generics.CreateAPIView):
+    queryset = Property.objects.all()
+    serializer_class = PropertyCreateSerializer
+
+    def get_serializer_context(self):
+        return {'request': self.request}
