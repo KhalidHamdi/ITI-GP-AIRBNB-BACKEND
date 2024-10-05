@@ -67,15 +67,18 @@ def landlord_detail(request, pk):
 
 @api_view(['GET'])
 def reservations_list(request):
-    # reservations = request.user.reservations.all()
-    reservations = request.user.reservations.filter(is_paid=True)
-    print('user', request.user)
-    print(reservations)
-    
-    serializer = ReservationsListSerializer(reservations, many=True)
-    return JsonResponse(serializer.data, safe=False)
+    # Fetch all reservations once, then filter in memory
+    reservations = request.user.reservations.all()
+    paid_reservations = reservations.filter(is_paid=True)
+    unpaid_reservations = reservations.filter(is_paid=False)
 
+    paid_serializer = ReservationsListSerializer(paid_reservations, many=True)
+    unpaid_serializer = ReservationsListSerializer(unpaid_reservations, many=True)
 
+    return JsonResponse({
+        'paid_reservations': paid_serializer.data,
+        'unpaid_reservations': unpaid_serializer.data,
+    }, safe=False)
 
 
 from rest_framework.authentication import TokenAuthentication
