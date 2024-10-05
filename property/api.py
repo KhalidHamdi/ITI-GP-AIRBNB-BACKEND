@@ -2,15 +2,13 @@ from django.http import JsonResponse
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import AllowAny
 from rest_framework import status
-from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, PropertyCreateSerializer
-from .models import Property
+from .serializers import PropertiesListSerializer, PropertiesDetailSerializer, PropertyCreateSerializer, PropertySerializer
+from .models import Property, PropertyImage
 from django.shortcuts import get_object_or_404
 from .filter import PropertyFilter ;
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-
-
 from langchain_openai import OpenAIEmbeddings
 import chromadb
 from langchain_community.vectorstores.chroma import Chroma
@@ -45,12 +43,12 @@ def properties_list(request):
     
     # Filter by category if provided
     if category:
-        properties = properties.filter(category__id=category)
+        properties = properties.filter(category=category)
+
     
     # Order by advertised first
     properties = properties.order_by('-is_advertised', 'id')
     
-    # Apply any additional filters using the PropertyFilter class (if required)
     filterset = PropertyFilter(request.GET, queryset=properties)
     
     if not filterset.is_valid():
@@ -67,15 +65,22 @@ def properties_list(request):
 
 
 @api_view(['POST'])
-@permission_classes([IsAuthenticated])  
+@permission_classes([IsAuthenticated])
 def create_property(request):
     serializer = PropertyCreateSerializer(data=request.data, context={'request': request})
 
     if serializer.is_valid():
-        serializer.save() 
-        return JsonResponse({'success': True, 'property': serializer.data}, status=status.HTTP_201_CREATED)
-    else:
-        return JsonResponse({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+        property_instance = serializer.save()
+        
+        if 'images' in request.FILES:
+            for image_file in request.FILES.getlist('images'):
+                PropertyImage.objects.create(property=property_instance, image=image_file)
+        
+        response_serializer = PropertiesDetailSerializer(property_instance, context={'request': request})
+        return Response({'success': True, 'property': response_serializer.data}, status=status.HTTP_201_CREATED)
+    
+    
+    return Response({'errors': serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
