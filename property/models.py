@@ -9,6 +9,7 @@ import chromadb
 from langchain_community.vectorstores.chroma import Chroma
 from langchain_core.documents import Document
 import os
+from cloudinary.utils import cloudinary_url
 
 
 opena_api_key = os.getenv('opena_api_key')
@@ -24,15 +25,11 @@ vector_db = Chroma(
 def add_data(vector_db, meta_data, id, city):
     doc = Document(
         page_content=meta_data,
-        metadata={"id": str(id), "city": city} 
-    )
+        metadata={"id": str(id), "city": city}
+     )
     vector_db.add_documents(
         documents=[doc]
     )
-
-
-
-
 
 
 class Property(models.Model):
@@ -48,27 +45,27 @@ class Property(models.Model):
     country = models.CharField(max_length=255)
     country_code = models.CharField(max_length=10)
     category = models.CharField(max_length=255)
-    image = CloudinaryField('image', blank=True, null=True)
     latitude = models.FloatField(blank=True, null=True)
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     landlord = models.ForeignKey(User, on_delete=models.CASCADE, null=False,)
     is_advertised = models.BooleanField(default=False)
-    paymob_order_id = models.CharField(max_length=255, blank=True, null=True) 
+    paymob_order_id = models.CharField(max_length=255, blank=True, null=True)
     payment_status = models.CharField(max_length=20, blank=True, null=True)
     meta = models.TextField(blank=True, null=True)
-
-
-
+   
     def image_url(self):
-        return f'{settings.WEBSITE_URL}{self.image.url}'
+        if self.image:
+            return cloudinary_url(self.image.public_id)[0]  
+        return None
 
-    def str(self):
+ 
+    def __str__(self):
         return (self.title)
-    
+     
     def __str__(self):
         return f"Property {self.title} by {self.landlord}"
-    
+     
     def save(self, *args, **kwargs):
         self.meta = (
             f"{self.title} - A stunning property located in {self.city}, {self.country}. "
@@ -76,24 +73,39 @@ class Property(models.Model):
             f"making it perfect for up to {self.guests} guests. "
             f"Enjoy your stay at just ${self.price_per_night} per night."
         )
-
+     
         if self.id:
             deletion_result = vector_db.delete(ids=[str(self.id)])
-            print("Deletion Result:", deletion_result) 
-
-
+            print("Deletion Result:", deletion_result)
+       
         super().save(*args, **kwargs)
-
+     
         add_data(vector_db, self.meta, self.id, self.city)
+         
 
+    from cloudinary.utils import cloudinary_url
 
+    def image_url(self):
+        if self.image:
+            return cloudinary_url(self.image.public_id)[0]
+        return None
 
-    # def save(self, args, **kwargs):
-    #     if not self.latitude or not self.longitude:
-    #         geocoder = OpenCageGeocode(settings.OPENCAGE_API_KEY)
-    #         query = f'{self.title}, {self.address}, {self.city}, {self.country}'
-    #         results = geocoder.geocode(query)
-    #         if results and len(results):
-    #             self.latitude = results[0]['geometry']['lat']
-    #             self.longitude = results[0]['geometry']['lng']
-    #     super().save(args, **kwargs)
+class PropertyImage(models.Model):
+    property = models.ForeignKey(Property, related_name='images', on_delete=models.CASCADE)
+    image = CloudinaryField('image')
+    def image_url(self):
+        return f'{settings.WEBSITE_URL}{self.image.url}'
+
+    def __str__(self):
+        return f"Image for {self.property.title}"
+
+# Commented out geocoding functionality
+# def save(self, *args, **kwargs):
+#     if not self.latitude or not self.longitude:
+#         geocoder = OpenCageGeocode(settings.OPENCAGE_API_KEY)
+#         query = f'{self.title}, {self.address}, {self.city}, {self.country}'
+#         results = geocoder.geocode(query)
+#         if results and len(results):
+#             self.latitude = results[0]['geometry']['lat']
+#             self.longitude = results[0]['geometry']['lng']
+#     super().save(*args, **kwargs)
