@@ -25,4 +25,7 @@ class ConversationMessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ConversationMessage
-        fields = ('id', 'body', 'sent_to', 'created_by',)
+        fields = ('id', 'body', 'sent_to', 'created_by','created_at')
+    
+    def get_created_at(self, obj):
+        return obj.created_at.strftime('%H:%M:%S')
