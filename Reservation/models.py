@@ -8,30 +8,25 @@ from useraccount.models import User
 
 class Reservation(models.Model):
     property = models.ForeignKey(Property, related_name='reservations', on_delete=models.CASCADE)
-    start_date = models.DateField()
-    end_date = models.DateField()
+    start_date = models.DateField(db_index=True)  # Adding index
+    end_date = models.DateField(db_index=True)    # Adding index
     number_of_nights = models.IntegerField()
     guests = models.IntegerField()
     total_price = models.FloatField()
-    created_by = models.ForeignKey(User, related_name='reservations', on_delete=models.CASCADE)
-    # created_by = models.ForeignKey(User, related_name='reservations', on_delete=models.CASCADE, null=True)
-    # created_by = models.ForeignKey('useraccount.User', on_delete=models.CASCADE, related_name='reservations')
-
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    id=models.CharField(primary_key=True,default=uuid.uuid4, editable=False, max_length=36)
+    created_by = models.ForeignKey(User, related_name='reservations', on_delete=models.CASCADE, db_index=True)  # Adding index
     
+    created_at = models.DateTimeField(auto_now_add=True, db_index=True)  # Adding index for better query performance on time-based queries
+    id = models.CharField(primary_key=True, default=uuid.uuid4, editable=False, max_length=36)
     
     first_name = models.CharField(max_length=100, blank=True, null=True)
     last_name = models.CharField(max_length=100, blank=True, null=True)
     email = models.EmailField(blank=True, null=True)
     phone = models.CharField(max_length=15, blank=True, null=True)
     
-    
     paymob_order_id = models.CharField(max_length=100, blank=True, null=True)
-    is_paid = models.BooleanField(default=False)
+    is_paid = models.BooleanField(default=False, db_index=True)  # Adding index to improve queries on payment status
     payment_status = models.CharField(max_length=50, blank=True, null=True)
-    
+
     
      
     def __str__(self):

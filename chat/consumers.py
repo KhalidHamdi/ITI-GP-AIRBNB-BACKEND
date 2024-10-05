@@ -4,7 +4,7 @@ from asgiref.sync import sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
 from .models import ConversationMessage
-
+from django.utils import timezone
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -80,11 +80,13 @@ class ChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         body = event['body']
         name = event['name']
+        created_time = timezone.now().isoformat() 
 
         await self.send(text_data=json.dumps({
             'type': 'message',
             'body': body,
-            'name': name
+            'name': name,
+            'created_at': created_time
         }))
 
     # Broadcast notification to WebSocket clients
@@ -101,9 +103,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
     # Save the message to the database
     @sync_to_async
     def save_message(self, conversation_id, body, sent_to_id, user):
+        created_time=timezone.now()
         ConversationMessage.objects.create(
             conversation_id=conversation_id,
             body=body,
             sent_to_id=sent_to_id,
+            created_at=created_time,
             created_by=user if user.is_authenticated else None  
         )
