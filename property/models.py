@@ -7,6 +7,7 @@ from cloudinary.models import CloudinaryField
 from useraccount.models import User
 import logging
 from .vector_db import add_data  # Import add_data from vector_db.py
+from django.utils import timezone
 
 logger = logging.getLogger(__name__)
 
@@ -28,6 +29,7 @@ class Property(models.Model):
     longitude = models.FloatField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     landlord = models.ForeignKey(User, on_delete=models.CASCADE, null=False)
+    advertised_at = models.DateTimeField(null=True, blank=True)  # When the property was advertised
     is_advertised = models.BooleanField(default=False)
     paymob_order_id = models.CharField(max_length=255, blank=True, null=True)
     payment_status = models.CharField(max_length=20, blank=True, null=True)
@@ -52,6 +54,20 @@ class Property(models.Model):
         
         # Try adding to vector database, log any errors without stopping save
         add_data(self.meta, self.id)
+
+
+
+# this is for advertisment time out ...
+    def start_advertisement(self):
+        """Start advertising the property and record the current time."""
+        self.is_advertised = True
+        self.advertised_at = timezone.now()  # Set the current time when advertised
+        self.save()
+
+    def stop_advertisement(self):
+        """Stop advertising the property."""
+        self.is_advertised = False
+        self.save()
 
     # Geocoding logic (commented out but included for completeness)
     # def save(self, *args, **kwargs):

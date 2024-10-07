@@ -54,6 +54,7 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
     longitude = serializers.ReadOnlyField()
     landlord = UserDetailSerializer(read_only=True, many=False)
     is_favorited = serializers.SerializerMethodField()
+    is_advertised =  serializers.ReadOnlyField()
 
     class Meta:
         model = Property
@@ -61,7 +62,7 @@ class PropertiesDetailSerializer(serializers.ModelSerializer):
             'id', 'title', 'description', 'price_per_night', 'images',
             'bedrooms', 'bathrooms', 'guests', 'city', 'address',
             'country', 'category', 'latitude', 'longitude', 
-            'average_rating', 'reviews_count','landlord', 'is_favorited'
+            'average_rating', 'reviews_count','landlord', 'is_favorited' , 'is_advertised' ,
         )
 
     def get_average_rating(self, obj):
