@@ -13,15 +13,15 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_avatar_url(self, obj):
         if obj.avatar:
-            return obj.avatar.url  # Assuming Cloudinary is set up correctly
-        return '/static/images/default-avatar.png'  # Path to a default avatar image
+            return obj.avatar.url  
+        return '/static/images/default-avatar.png' 
 
 class ReviewSerializer(serializers.ModelSerializer):
     user = UserSerializer(read_only=True)
 
     class Meta:
         model = Review
-        fields = ['id', 'comment', 'rating', 'user', 'created_at']
+        fields = ['id', 'comment', 'rating', 'cleanliness', 'accuracy', 'communication', 'location', 'check_in', 'value', 'user', 'created_at']
 
     def validate_rating(self, value):
         if value < 1 or value > 5:
