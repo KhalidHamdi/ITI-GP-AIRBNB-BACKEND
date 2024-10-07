@@ -22,12 +22,12 @@ def get_property_reviews(request, property_id):
 def create_review(request, property_id):
     user = request.user
     property = get_object_or_404(Property, id=property_id)
-    
+
     # Check if the user has already reviewed the property
     existing_review = Review.objects.filter(property=property, user=user).first()
     if existing_review:
         raise ValidationError("You have already reviewed this property.")
-    
+
     # Create a new review
     serializer = ReviewSerializer(data=request.data, context={'request': request})
     if serializer.is_valid():
