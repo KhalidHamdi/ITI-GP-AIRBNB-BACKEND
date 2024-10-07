@@ -75,5 +75,8 @@ urlpatterns = [
     path('api/favorite/', include('favorite.urls')),
     
     path('api/payments/', include('payments.urls')),
+    
+    path('', include('support.urls')),  
+
 ]
 

@@ -144,6 +144,7 @@ INSTALLED_APPS = [
     'reviews_and_ratings',
     'payments',
     'favorite',
+    'support'
 ]
 
 
