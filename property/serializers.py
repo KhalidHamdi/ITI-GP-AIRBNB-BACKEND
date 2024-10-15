@@ -111,8 +111,10 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
 
 
 class PropertyUpdateSerializer(serializers.ModelSerializer):
-    new_images = serializers.ListField(
-        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
+    new_images = serializers.ImageField(
+        max_length=1000000,
+        allow_empty_file=False,
+        use_url=False,
         write_only=True,
         required=False
     )
@@ -126,17 +128,15 @@ class PropertyUpdateSerializer(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        new_images = validated_data.pop('new_images', None)
+        new_image = validated_data.pop('new_images', None)
         
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        if new_images:
+        if new_image:
             instance.images.all().delete()
-            
-            for image_data in new_images:
-                PropertyImage.objects.create(property=instance, image=image_data)
+            PropertyImage.objects.create(property=instance, image=new_image)
 
         instance.refresh_from_db()
         return instance
