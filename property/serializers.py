@@ -14,6 +14,7 @@ class PropertyImageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {'image': instance.image.url if instance.image else None}
 
+
 class PropertiesListSerializer(serializers.ModelSerializer):
     images = PropertyImageSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
@@ -111,10 +112,8 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
 
 
 class PropertyUpdateSerializer(serializers.ModelSerializer):
-    new_images = serializers.ImageField(
-        max_length=1000000,
-        allow_empty_file=False,
-        use_url=False,
+    new_images = serializers.ListField(
+        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
         write_only=True,
         required=False
     )
@@ -128,15 +127,20 @@ class PropertyUpdateSerializer(serializers.ModelSerializer):
         )
 
     def update(self, instance, validated_data):
-        new_image = validated_data.pop('new_images', None)
-        
+        new_images = validated_data.pop('new_images', None)
+
+        # Update property fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
         instance.save()
 
-        if new_image:
+        # Handle new images
+        if new_images:
+            # Delete old images
             instance.images.all().delete()
-            PropertyImage.objects.create(property=instance, image=new_image)
+            # Save new images
+            for image_data in new_images:
+                PropertyImage.objects.create(property=instance, image=image_data)
 
         instance.refresh_from_db()
         return instance

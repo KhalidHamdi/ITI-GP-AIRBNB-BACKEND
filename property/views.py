@@ -21,6 +21,9 @@ class UpdatePropertyView(generics.UpdateAPIView):
 
     def get_object(self):
         return get_object_or_404(Property, pk=self.kwargs['pk'], landlord=self.request.user)
+    
+    
+    
 
     def update(self, request, *args, **kwargs):
         partial = kwargs.pop('partial', False)
