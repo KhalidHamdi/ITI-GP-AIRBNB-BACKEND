@@ -14,7 +14,7 @@ from datetime import timedelta
 @permission_classes([AllowAny])
 def property_reservations(request, pk):
     try:
-        reservations = Reservation.objects.filter(property_id=pk, is_paid=True)
+        reservations = Reservation.objects.filter(property_id=pk)
         if not reservations.exists():
             return JsonResponse({'error': 'Property not found.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -32,6 +32,18 @@ def book_property(request, pk):
     try:
         data = request.data
         property = get_object_or_404(Property, pk=pk)
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        
+        overlapping_reservations = Reservation.objects.filter(
+            property=property,
+            start_date__lt=end_date,  
+            end_date__gt=start_date,
+        )
+
+        if overlapping_reservations.exists():
+            return JsonResponse({'error': 'The selected dates are already reserved.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         reservation = Reservation.objects.create(
             property=property,
