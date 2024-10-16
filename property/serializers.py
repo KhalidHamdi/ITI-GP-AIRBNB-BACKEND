@@ -14,6 +14,7 @@ class PropertyImageSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         return {'image': instance.image.url if instance.image else None}
 
+
 class PropertiesListSerializer(serializers.ModelSerializer):
     images = PropertyImageSerializer(many=True, read_only=True)
     average_rating = serializers.SerializerMethodField()
@@ -104,46 +105,50 @@ class PropertyCreateSerializer(serializers.ModelSerializer):
 
         property_instance = Property.objects.create(landlord=landlord, **validated_data)
 
-        # Handle images
         for image_data in images_data:
             PropertyImage.objects.create(property=property_instance, **image_data)
 
         return property_instance
 
+
 class PropertyUpdateSerializer(serializers.ModelSerializer):
-    images = PropertyImageSerializer(many=True, required=False)  
+    new_images = serializers.ListField(
+        child=serializers.ImageField(max_length=1000000, allow_empty_file=False, use_url=False),
+        write_only=True,
+        required=False
+    )
+    images = PropertyImageSerializer(many=True, read_only=True)
 
     class Meta:
         model = Property
         fields = (
-            'title',
-            'description',
-            'price_per_night',
-            'bedrooms',
-            'bathrooms',
-            'guests',
-            'country',
-            'country_code',
-            'category',
-            'city',
-            'address',
-            'images',
+            'title', 'description', 'price_per_night', 'bedrooms', 'bathrooms',
+            'guests', 'country', 'country_code', 'category', 'city', 'address', 'new_images', 'images',
         )
 
     def update(self, instance, validated_data):
-        images_data = validated_data.pop('images', [])
+        new_images = validated_data.pop('new_images', None)
+
+        # Update property fields
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
-        
         instance.save()
 
-        # Update images
-        if images_data:
-            instance.images.all().delete()  
-            for image_data in images_data:
-                PropertyImage.objects.create(property=instance, **image_data)
+        # Handle new images
+        if new_images:
+            # Delete old images
+            instance.images.all().delete()
+            # Save new images
+            for image_data in new_images:
+                PropertyImage.objects.create(property=instance, image=image_data)
 
+        instance.refresh_from_db()
         return instance
+
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['images'] = PropertyImageSerializer(instance.images.all(), many=True).data
+        return representation
 
 class BookingSerializer(serializers.ModelSerializer):
     class Meta:

@@ -14,7 +14,7 @@ from datetime import timedelta
 @permission_classes([AllowAny])
 def property_reservations(request, pk):
     try:
-        reservations = Reservation.objects.filter(property_id=pk, is_paid=True)
+        reservations = Reservation.objects.filter(property_id=pk)
         if not reservations.exists():
             return JsonResponse({'error': 'Property not found.'}, status=status.HTTP_404_NOT_FOUND)
 
@@ -32,6 +32,18 @@ def book_property(request, pk):
     try:
         data = request.data
         property = get_object_or_404(Property, pk=pk)
+        start_date = data.get('start_date')
+        end_date = data.get('end_date')
+        
+        overlapping_reservations = Reservation.objects.filter(
+            property=property,
+            start_date__lt=end_date,  
+            end_date__gt=start_date,
+        )
+
+        if overlapping_reservations.exists():
+            return JsonResponse({'error': 'The selected dates are already reserved.'}, status=status.HTTP_400_BAD_REQUEST)
+
 
         reservation = Reservation.objects.create(
             property=property,
@@ -57,18 +69,19 @@ def cancel_reservation(request, pk):
     try:
         reservation = Reservation.objects.get(id=pk, created_by=request.user)
 
-        current_date = timezone.now().date()
-        if reservation.start_date - current_date < timedelta(days=7):
-            return JsonResponse(
-                {'error': 'You can only cancel the reservation up to 7 days before the start date.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        current_time = timezone.now().date()
 
+        if reservation.is_paid:
+            if (reservation.start_date - current_time) < timedelta(days=1):
+                return JsonResponse(
+                    {'error': 'Paid reservations cannot be canceled within 24 hours of the start time.'},
+                    status=400
+                )
         reservation.delete()
-        return JsonResponse({'message': 'Reservation cancelled successfully.'}, status=status.HTTP_200_OK)
+        return JsonResponse({'message': 'Reservation canceled successfully.'}, status=200)
 
     except Reservation.DoesNotExist:
-        return JsonResponse({'error': 'Reservation not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'error': 'Reservation not found.'}, status=404)
     except Exception as e:
         print(f"Error from server: {e}")
-        return JsonResponse({'error': 'An error occurred while cancelling the reservation.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': 'An error occurred while canceling the reservation.'}, status=500)

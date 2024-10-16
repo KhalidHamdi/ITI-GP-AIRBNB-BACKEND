@@ -12,15 +12,38 @@ from .serializers import PropertyUpdateSerializer ,PropertySerializer , Property
 from .models import Property
 from django.shortcuts import get_object_or_404
 
+
+
 class UpdatePropertyView(generics.UpdateAPIView):
     queryset = Property.objects.all()
     serializer_class = PropertyUpdateSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated]
 
     def get_object(self):
-        obj = get_object_or_404(Property, pk=self.kwargs['pk'], landlord=self.request.user)
-        return obj
+        return get_object_or_404(Property, pk=self.kwargs['pk'], landlord=self.request.user)
+    
+    
+    
 
+    def update(self, request, *args, **kwargs):
+        partial = kwargs.pop('partial', False)
+        instance = self.get_object()
+        
+        image_files = request.FILES.getlist('images')
+        data = request.data.copy()
+        
+        if image_files:
+            data['images'] = image_files
+
+        serializer = self.get_serializer(instance, data=data, partial=partial)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+
+        if getattr(instance, '_prefetched_objects_cache', None):
+            instance._prefetched_objects_cache = {}
+
+        return Response(serializer.data)
+    
 class GeocodeView(APIView):
     permission_classes = [AllowAny]
 
