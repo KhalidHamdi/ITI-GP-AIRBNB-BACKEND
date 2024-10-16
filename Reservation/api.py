@@ -55,20 +55,16 @@ def book_property(request, pk):
 @permission_classes([IsAuthenticated])
 def cancel_reservation(request, pk):
     try:
-        # Get the reservation for the authenticated user
         reservation = Reservation.objects.get(id=pk, created_by=request.user)
 
         current_time = timezone.now().date()
 
-        # Check if the reservation is paid
         if reservation.is_paid:
-            # Check if the current time is within 1 day of the start date
             if (reservation.start_date - current_time) < timedelta(days=1):
                 return JsonResponse(
                     {'error': 'Paid reservations cannot be canceled within 24 hours of the start time.'},
                     status=400
                 )
-        # If unpaid, allow cancellation
         reservation.delete()
         return JsonResponse({'message': 'Reservation canceled successfully.'}, status=200)
 
