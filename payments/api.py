@@ -140,7 +140,7 @@ def payment_redirect(request):
     
     if success == 'true':
         # return HttpResponseRedirect("http://localhost:5173/?message=Payment successful")
-        return HttpResponseRedirect("https://iti-gp-airbnb-frontend.vercel.app/?message=Payment successful")
+        return HttpResponseRedirect("https://airiti.netlify.app/?message=Payment successful")
     else:
         # return HttpResponseRedirect("http://localhost:5173/?message=Payment failed")
-        return HttpResponseRedirect("https://iti-gp-airbnb-frontend.vercel.app/?message=Payment failed")
+        return HttpResponseRedirect("https://airiti.netlify.app/?message=Payment failed")
