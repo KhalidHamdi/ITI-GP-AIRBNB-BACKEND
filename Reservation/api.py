@@ -55,20 +55,25 @@ def book_property(request, pk):
 @permission_classes([IsAuthenticated])
 def cancel_reservation(request, pk):
     try:
+        # Get the reservation for the authenticated user
         reservation = Reservation.objects.get(id=pk, created_by=request.user)
 
-        current_date = timezone.now().date()
-        if reservation.start_date - current_date < timedelta(days=7):
-            return JsonResponse(
-                {'error': 'You can only cancel the reservation up to 7 days before the start date.'},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+        current_time = timezone.now().date()
 
+        # Check if the reservation is paid
+        if reservation.is_paid:
+            # Check if the current time is within 1 day of the start date
+            if (reservation.start_date - current_time) < timedelta(days=1):
+                return JsonResponse(
+                    {'error': 'Paid reservations cannot be canceled within 24 hours of the start time.'},
+                    status=400
+                )
+        # If unpaid, allow cancellation
         reservation.delete()
-        return JsonResponse({'message': 'Reservation cancelled successfully.'}, status=status.HTTP_200_OK)
+        return JsonResponse({'message': 'Reservation canceled successfully.'}, status=200)
 
     except Reservation.DoesNotExist:
-        return JsonResponse({'error': 'Reservation not found.'}, status=status.HTTP_404_NOT_FOUND)
+        return JsonResponse({'error': 'Reservation not found.'}, status=404)
     except Exception as e:
         print(f"Error from server: {e}")
-        return JsonResponse({'error': 'An error occurred while cancelling the reservation.'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        return JsonResponse({'error': 'An error occurred while canceling the reservation.'}, status=500)
